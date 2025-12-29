@@ -69,7 +69,7 @@ const Preloader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
         Architecting the future
       </div>
       <div className="absolute bottom-10 right-10 text-white/5 text-[10px] font-black uppercase tracking-widest pointer-events-none">
-        © 2024 Midtech Solutions
+        © {new Date().getFullYear()} Midtech Solutions
       </div>
     </div>
   );

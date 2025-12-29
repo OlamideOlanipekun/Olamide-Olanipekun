@@ -129,7 +129,7 @@ const Navbar: React.FC = () => {
             <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 transition-colors font-black text-[10px] uppercase tracking-widest">GitHub</a>
             <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 transition-colors font-black text-[10px] uppercase tracking-widest">LinkedIn</a>
           </div>
-          <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-[0.2em]">© 2024 Midtech Solutions</p>
+          <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-[0.2em]">© {new Date().getFullYear()} Midtech Solutions</p>
         </div>
       </div>
     </nav>

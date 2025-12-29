@@ -31,7 +31,7 @@ const Contact: React.FC = () => {
             </p>
             
             <p className="text-base sm:text-lg text-zinc-600 mb-10 sm:mb-14 leading-relaxed max-w-md">
-              Midtech Solutions is currently accepting high-impact project partnerships for Q4 2024 and beyond. We specialize in digital transformation.
+              Midtech Solutions is currently accepting high-impact project partnerships for 2025 and beyond. We specialize in digital transformation.
             </p>
 
             <div className="space-y-6 sm:space-y-8">
@@ -144,7 +144,7 @@ const Contact: React.FC = () => {
 
         <div className="mt-20 sm:mt-32 pt-8 sm:pt-12 border-t border-zinc-200 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-zinc-400 text-[9px] sm:text-[10px] font-black tracking-[0.3em] uppercase text-center md:text-left">
-            © 2024 Midtech Solutions. Lead by Olamide Olanipekun.
+            © {new Date().getFullYear()} Midtech Solutions. Lead by Olamide Olanipekun.
           </div>
           <div className="flex gap-6 sm:gap-10">
             <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 transition-colors text-[9px] sm:text-[10px] font-black uppercase tracking-widest">LinkedIn</a>
