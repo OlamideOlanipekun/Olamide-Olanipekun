@@ -56,34 +56,47 @@ const Skills: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {SKILLS.map((skill, idx) => (
             <div 
               key={skill.name} 
-              className={`p-8 sm:p-10 bg-white border border-zinc-200/60 rounded-[2.5rem] hover:border-indigo-600/40 transition-all group flex flex-col shadow-sm hover:shadow-2xl hover:shadow-indigo-600/10 hover:-translate-y-2 relative overflow-hidden animate-fade-up`}
+              className={`p-8 bg-white border border-zinc-200 rounded-[2.5rem] hover:border-indigo-600/40 transition-all group flex flex-col shadow-sm hover:shadow-2xl hover:shadow-indigo-600/10 hover:-translate-y-2 relative overflow-hidden animate-fade-up h-full`}
               style={{ animationDelay: `${idx * 50}ms` }}
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50/50 blur-[50px] rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none group-hover:scale-150 transition-transform duration-700"></div>
+              {/* Background Glow */}
+              <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50/40 blur-[40px] rounded-full translate-x-1/2 -translate-y-1/2 group-hover:bg-indigo-100/60 transition-colors"></div>
               
-              <div className="w-16 h-16 bg-zinc-50 rounded-2xl flex items-center justify-center text-3xl mb-8 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 group-hover:rotate-6 shadow-inner border border-zinc-100">
-                {skill.icon}
-              </div>
-              
-              <div className="mb-auto">
-                <h3 className="text-xl font-black mb-1 text-zinc-900 tracking-tight">{skill.name}</h3>
-                <div className="text-[9px] text-zinc-400 font-bold uppercase tracking-[0.2em] mb-8">{skill.category}</div>
-              </div>
-              
-              <div className="mt-6">
-                <div className="flex justify-between items-center text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-3">
-                  <span>Proficiency</span>
-                  <span className="text-zinc-900 group-hover:text-indigo-600 transition-colors font-mono">{skill.level}%</span>
+              <div className="flex justify-between items-start mb-10">
+                <div className="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center text-2xl group-hover:bg-zinc-900 group-hover:text-white transition-all duration-500 shadow-inner border border-zinc-100">
+                  {skill.icon}
                 </div>
-                <div className="h-2 w-full bg-zinc-100 rounded-full overflow-hidden p-[2px]">
-                  <div 
-                    className="h-full bg-gradient-to-r from-zinc-900 to-zinc-700 rounded-full group-hover:from-indigo-600 group-hover:to-purple-500 transition-all duration-1000 ease-out shadow-[0_0_8px_rgba(79,70,229,0)] group-hover:shadow-[0_0_12px_rgba(79,70,229,0.3)]"
-                    style={{ width: `${skill.level}%` }}
-                  ></div>
+                <div className="flex flex-col items-end">
+                  <span className="text-[8px] font-black text-indigo-600 uppercase tracking-widest px-2 py-1 bg-indigo-50 rounded-md mb-1">Advanced</span>
+                  <div className="flex gap-1">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className={`w-1 h-1 rounded-full ${i <= 3 ? 'bg-indigo-600/30' : 'bg-zinc-200'}`}></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mb-6">
+                <div className="text-[9px] text-zinc-400 font-bold uppercase tracking-[0.3em] mb-2">{skill.category}</div>
+                <h3 className="text-xl font-black text-zinc-900 tracking-tight leading-none group-hover:text-indigo-600 transition-colors">{skill.name}</h3>
+              </div>
+              
+              <div className="mt-auto space-y-4">
+                <div className="flex flex-wrap gap-1.5">
+                  {skill.tags?.map(tag => (
+                    <span key={tag} className="text-[8px] font-bold text-zinc-500 px-2 py-1 bg-zinc-50 rounded-lg border border-zinc-100 uppercase tracking-tight group-hover:bg-white group-hover:border-indigo-100 transition-colors">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                
+                <div className="pt-4 border-t border-zinc-100 flex items-center justify-between">
+                  <span className="text-[7px] font-black uppercase tracking-[0.2em] text-zinc-300 group-hover:text-zinc-400 transition-colors">Status: Optimized</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 opacity-40 group-hover:opacity-100 transition-opacity"></div>
                 </div>
               </div>
             </div>

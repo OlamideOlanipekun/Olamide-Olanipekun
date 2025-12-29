@@ -1,4 +1,3 @@
-
 export interface Project {
   id: string;
   title: string;
@@ -16,7 +15,8 @@ export interface Skill {
   name: string;
   category: 'Frontend' | 'Backend' | 'Tools' | 'Design';
   icon: string;
-  level: number; // 0-100
+  level: number; // 0-100 (Internal weight)
+  tags?: string[]; // Specific focus areas
 }
 
 export interface Experience {

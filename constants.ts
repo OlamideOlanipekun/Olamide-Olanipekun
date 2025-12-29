@@ -84,14 +84,62 @@ export const PROJECTS: Project[] = [
 ];
 
 export const SKILLS: Skill[] = [
-  { name: 'React / Next.js', category: 'Frontend', icon: '⚛️', level: 92 },
-  { name: 'TypeScript', category: 'Frontend', icon: '🔷', level: 88 },
-  { name: 'PHP / MySQL', category: 'Backend', icon: '🐘', level: 90 },
-  { name: 'Node.js', category: 'Backend', icon: '🟢', level: 85 },
-  { name: 'Tailwind / Bootstrap', category: 'Frontend', icon: '🎨', level: 95 },
-  { name: 'AI Engineering', category: 'Tools', icon: '🤖', level: 82 },
-  { name: 'Git / Version Control', category: 'Tools', icon: '🌿', level: 90 },
-  { name: 'Performance / SEO', category: 'Tools', icon: '⚡', level: 85 },
+  { 
+    name: 'React / Next.js', 
+    category: 'Frontend', 
+    icon: '⚛️', 
+    level: 92,
+    tags: ['Server Components', 'Hooks', 'Vite', 'App Router']
+  },
+  { 
+    name: 'TypeScript', 
+    category: 'Frontend', 
+    icon: '🔷', 
+    level: 88,
+    tags: ['Generic Types', 'Interface Design', 'Static Analysis']
+  },
+  { 
+    name: 'PHP / MySQL', 
+    category: 'Backend', 
+    icon: '🐘', 
+    level: 90,
+    tags: ['Laravel', 'REST APIs', 'Query Optimization']
+  },
+  { 
+    name: 'Node.js', 
+    category: 'Backend', 
+    icon: '🟢', 
+    level: 85,
+    tags: ['Express', 'Auth Systems', 'Microservices']
+  },
+  { 
+    name: 'Tailwind / Bootstrap', 
+    category: 'Frontend', 
+    icon: '🎨', 
+    level: 95,
+    tags: ['Design Systems', 'Responsive UI', 'Custom Config']
+  },
+  { 
+    name: 'AI Engineering', 
+    category: 'Tools', 
+    icon: '🤖', 
+    level: 82,
+    tags: ['Gemini API', 'Prompt Design', 'RAG Patterns']
+  },
+  { 
+    name: 'Git / CI/CD', 
+    category: 'Tools', 
+    icon: '🌿', 
+    level: 90,
+    tags: ['Workflow Automation', 'Docker', 'Vercel']
+  },
+  { 
+    name: 'Performance / SEO', 
+    category: 'Tools', 
+    icon: '⚡', 
+    level: 85,
+    tags: ['Core Web Vitals', 'SSR', 'Caching Strategies']
+  },
 ];
 
 export const EXPERIENCES: Experience[] = [
