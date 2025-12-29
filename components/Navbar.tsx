@@ -95,7 +95,7 @@ const Navbar: React.FC = () => {
             <Link 
               key={link.name} 
               to={link.href} 
-              className={`text-5xl font-black tracking-tighter text-zinc-900 hover:text-indigo-600 transition-all duration-300 transform ${
+              className={`text-3xl sm:text-4xl font-black tracking-tighter text-zinc-900 hover:text-indigo-600 transition-all duration-300 transform ${
                 isMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               }`}
               style={{ transitionDelay: `${150 + idx * 100}ms` }}
@@ -105,14 +105,14 @@ const Navbar: React.FC = () => {
           ))}
           
           <div 
-            className={`mt-10 w-full max-w-xs transition-all duration-500 transform ${
+            className={`mt-10 w-full max-w-[280px] transition-all duration-500 transform ${
               isMenuOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}
             style={{ transitionDelay: `450ms` }}
           >
             <Link 
               to="/contact" 
-              className="w-full py-5 bg-zinc-900 text-white text-center text-xs font-black uppercase tracking-[0.2em] rounded-2xl block shadow-2xl shadow-zinc-900/10"
+              className="w-full py-4 bg-zinc-900 text-white text-center text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl block shadow-2xl shadow-zinc-900/10"
             >
               Collaborate
             </Link>
