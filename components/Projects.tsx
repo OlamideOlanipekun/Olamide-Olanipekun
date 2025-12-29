@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { PROJECTS } from '../constants.ts';
 
 interface ProjectsProps {
@@ -12,6 +12,8 @@ type Category = typeof Categories[number];
 const Projects: React.FC<ProjectsProps> = ({ limit }) => {
   const [activeCategory, setActiveCategory] = useState<Category>('All');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const location = useLocation();
+  const isWorkPage = location.pathname === '/work';
 
   const filteredProjects = useMemo(() => {
     let base = activeCategory === 'All' ? PROJECTS : PROJECTS.filter(p => p.category === activeCategory);
@@ -19,19 +21,21 @@ const Projects: React.FC<ProjectsProps> = ({ limit }) => {
   }, [activeCategory, limit]);
 
   return (
-    <section id="projects" className="py-24 sm:py-32 bg-white relative overflow-hidden">
+    <section id="projects" className={`py-24 sm:py-32 bg-white relative overflow-hidden ${isWorkPage ? 'pt-0' : ''}`}>
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-50 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
-          <div className="max-w-2xl animate-fade-up">
-            <h2 className="text-zinc-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4">Case Studies</h2>
-            <p className="text-4xl md:text-7xl font-black tracking-tighter leading-[1] mb-2 text-zinc-900">
-              Selected <span className="text-zinc-300">Work.</span>
-            </p>
-          </div>
+          {!isWorkPage && (
+            <div className="max-w-2xl animate-fade-up">
+              <h2 className="text-zinc-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4">Case Studies</h2>
+              <p className="text-4xl md:text-7xl font-black tracking-tighter leading-[1] mb-2 text-zinc-900">
+                Selected <span className="text-zinc-300">Work.</span>
+              </p>
+            </div>
+          )}
           
-          <div className="flex overflow-x-auto no-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0 w-screen sm:w-auto">
+          <div className={`flex overflow-x-auto no-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0 w-screen sm:w-auto ${isWorkPage ? 'w-full' : ''}`}>
             <div className="flex gap-2 p-1.5 bg-zinc-50 rounded-2xl border border-zinc-200">
               {Categories.map(cat => (
                 <button 
@@ -50,7 +54,7 @@ const Projects: React.FC<ProjectsProps> = ({ limit }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
           {filteredProjects.map((project, idx) => (
             <Link 
               to={`/work/${project.id}`}

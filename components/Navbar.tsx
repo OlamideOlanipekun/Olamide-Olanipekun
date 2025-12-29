@@ -36,13 +36,16 @@ const Navbar: React.FC = () => {
   return (
     <nav 
       className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 ${
-        isScrolled || isMenuOpen ? 'bg-white/80 backdrop-blur-xl py-4 border-b border-zinc-200 shadow-sm' : 'bg-transparent py-6'
+        isScrolled || isMenuOpen ? 'bg-white/90 backdrop-blur-xl py-4 border-b border-zinc-200 shadow-sm' : 'bg-transparent py-6'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <Link to="/" className="text-xl font-bold tracking-tighter flex items-center gap-2 group relative z-[75]">
-          <span className="bg-indigo-600 text-white w-8 h-8 rounded-lg flex items-center justify-center group-hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-600/20 text-sm">O</span>
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 to-zinc-600 uppercase tracking-widest text-sm hidden sm:block">Olamide</span>
+        <Link to="/" className="text-xl font-bold tracking-tighter flex items-center gap-3 group relative z-[75]">
+          <span className="bg-zinc-900 text-white w-9 h-9 rounded-xl flex items-center justify-center group-hover:bg-indigo-600 transition-all shadow-lg shadow-zinc-900/10 text-sm font-black">M</span>
+          <div className="flex flex-col">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 to-zinc-600 uppercase tracking-[0.2em] text-[11px] font-black leading-none mb-0.5">Midtech</span>
+            <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest leading-none">Solutions</span>
+          </div>
         </Link>
 
         {/* Desktop Nav */}
@@ -51,7 +54,7 @@ const Navbar: React.FC = () => {
             <Link 
               key={link.name} 
               to={link.href} 
-              className={`text-[11px] font-bold uppercase tracking-[0.2em] transition-colors ${
+              className={`text-[10px] font-black uppercase tracking-[0.2em] transition-colors ${
                 location.pathname === link.href ? 'text-indigo-600' : 'text-zinc-500 hover:text-zinc-900'
               }`}
             >
@@ -60,9 +63,9 @@ const Navbar: React.FC = () => {
           ))}
           <Link 
             to="/contact" 
-            className="px-6 py-2.5 bg-zinc-900 text-white text-[11px] font-bold uppercase tracking-[0.2em] rounded-full hover:bg-zinc-800 transition-all shadow-lg shadow-zinc-900/10"
+            className="px-6 py-2.5 bg-zinc-900 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full hover:bg-indigo-600 transition-all shadow-lg shadow-zinc-900/5"
           >
-            Let's Talk
+            Start Project
           </Link>
         </div>
 
@@ -106,9 +109,9 @@ const Navbar: React.FC = () => {
           >
             <Link 
               to="/contact" 
-              className="w-full py-5 bg-indigo-600 text-white text-center text-sm font-black uppercase tracking-widest rounded-2xl block shadow-2xl shadow-indigo-600/20"
+              className="w-full py-5 bg-zinc-900 text-white text-center text-sm font-black uppercase tracking-widest rounded-2xl block shadow-2xl shadow-zinc-900/10"
             >
-              Start a Project
+              Collaborate
             </Link>
           </div>
         </div>
@@ -119,9 +122,8 @@ const Navbar: React.FC = () => {
           }`}
           style={{ transitionDelay: `500ms` }}
         >
-          <a href={SOCIAL_LINKS.github} className="text-zinc-400 hover:text-zinc-900 transition-colors font-bold text-xs">GH</a>
-          <a href={SOCIAL_LINKS.linkedin} className="text-zinc-400 hover:text-zinc-900 transition-colors font-bold text-xs">LI</a>
-          <a href={SOCIAL_LINKS.twitter} className="text-zinc-400 hover:text-zinc-900 transition-colors font-bold text-xs">TW</a>
+          <a href={SOCIAL_LINKS.github} className="text-zinc-400 hover:text-zinc-900 transition-colors font-bold text-xs uppercase tracking-widest">GitHub</a>
+          <a href={SOCIAL_LINKS.linkedin} className="text-zinc-400 hover:text-zinc-900 transition-colors font-bold text-xs uppercase tracking-widest">LinkedIn</a>
         </div>
       </div>
     </nav>

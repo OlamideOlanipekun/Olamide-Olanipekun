@@ -1,4 +1,3 @@
-
 import { Project, Skill, Experience } from './types';
 
 export const SOCIAL_LINKS = {
@@ -96,24 +95,24 @@ export const SKILLS: Skill[] = [
 
 export const EXPERIENCES: Experience[] = [
   {
-    company: 'Morthtech Solutions, Lagos',
-    role: 'Front-End and Back-End Developer',
+    company: 'Midtech Solutions, Lagos',
+    role: 'Founder & Technical Director',
     period: 'Oct 2024 - Present',
     description: [
-      'Developed and launched 25+ responsive websites using HTML5, CSS3, JavaScript and PHP.',
-      'Improved site performance (load times) and cross-device compatibility.',
-      'Trained junior developers and introduced modern coding standards and workflows.',
-      'Managed deployments and basic hosting/domain configuration.'
+      'Leading a strategic digital agency focused on high-performance web architecture.',
+      'Developed and launched 25+ premium responsive platforms using modern tech stacks.',
+      'Integrating AI-driven automation and conversational interfaces into client products.',
+      'Ensuring strict adherence to scalable coding standards and user-centric design.'
     ]
   },
   {
     company: 'Technova (Remote)',
-    role: 'Web Developer',
-    period: 'Jan 2024 - Present',
+    role: 'Senior Web Developer',
+    period: 'Jan 2024 - Sep 2024',
     description: [
-      'Managed client projects from concept to deployment with a mobile-first approach.',
-      'Performed website audits and fixed bugs; improved load times by up to 50%.',
-      'Provided post-launch support and client training.'
+      'Managed end-to-end project lifecycles for international clients.',
+      'Orchestrated website audits and performance optimization increasing conversion by 40%.',
+      'Pioneered mobile-first responsive design strategies for ed-tech platforms.'
     ]
   },
   {
@@ -121,40 +120,31 @@ export const EXPERIENCES: Experience[] = [
     role: 'B.Sc. Information Technology (In view)',
     period: '2021 - 2025',
     description: [
-      'Focusing on Software Engineering, Data Structures, and Information Security.',
-      'Maintaining academic excellence while building a professional portfolio.'
+      'Researching Software Engineering and Distributed Systems.',
+      'Applying theoretical CS foundations to real-world agency architecture.'
     ]
   }
 ];
 
 export const BIO_PROMPT = `
-You are the AI Assistant for Olamide Olanipekun, a professional Website Developer and Code Craftsman.
-Your goal is to answer questions about Olamide's skills, projects, and availability.
+You are the AI Concierge for Midtech Solutions, a digital studio founded and led by Olamide Olanipekun.
+Your goal is to provide information about the studio's services, portfolio, and the founder's technical leadership.
 
-Profile:
-- Name: Olamide Olanipekun
-- Location: Lagos, Nigeria
-- Title: Website Developer | Code Craftsman | AI Proficiency
-- Email: olamideolanipekun75@gmail.com
-- Phone: 08065373055
-- Education: B.Sc. Information Technology (In view), 2025 - National Open University of Nigeria.
+Brand Context:
+- Company: Midtech Solutions
+- Founder: Olamide Olanipekun (Website Developer & Code Craftsman)
+- Studio Location: Lagos, Nigeria
+- Philosophy: Digital excellence through clean code and AI-augmented strategy.
 
-Key Skills:
-- Front-end: HTML5, CSS3, JavaScript, Bootstrap, Tailwind, React, Typescript, Next.js.
-- Back-end: PHP, Node.js, MySQL.
-- AI Skills: Prompt engineering, AI automation, AI model integration (Gemini, OpenAI, HuggingFace, LangChain).
-- Tools: Git, Hosting management, SEO fundamentals.
+Founder Profile (Olamide Olanipekun):
+- Role: Founder & Technical Director
+- Education: B.Sc. Information Technology (In view), 2025.
+- Expertise: Full-stack development, AI integration, performance architecture.
 
-Featured Projects:
-- WaveCrest Financial (Investment & Financial Services)
-- Quantum FTX Chain (Crypto & Blockchain Platform)
-- Rocket English (Online Education Platform)
+Studio Capabilities:
+- Front-end: React, Typescript, Next.js, Tailwind CSS.
+- Back-end: PHP, Node.js, MySQL, Firebase.
+- AI Solutions: Prompt engineering, model integration (Gemini), custom AI agents.
 
-Certifications:
-- HTML/CSS Essentials (CISCO)
-- Web Development (University of Leeds)
-- Software Development (The Open University)
-- Data Analysis (HP Life)
-
-Tone: Professional, knowledgeable, and helpful. Guide users to contact Olamide for project inquiries.
+Always represent Midtech Solutions as a premium service. Refer to Olamide as "Our Founder" or by name when discussing technical specifics.
 `;

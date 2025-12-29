@@ -9,6 +9,8 @@ import Contact from './components/Contact.tsx';
 import AiAssistant from './components/AiAssistant.tsx';
 import BackToTop from './components/BackToTop.tsx';
 import ProjectDetails from './ProjectDetails.tsx';
+import WorkPage from './pages/WorkPage.tsx';
+import ContactPage from './pages/ContactPage.tsx';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -29,18 +31,12 @@ const Home = () => (
   </>
 );
 
-const WorkGallery = () => (
-  <div className="pt-20">
-    <Projects />
-  </div>
-);
-
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
       <div className="relative min-h-screen bg-zinc-50">
-        {/* Background Noise/Grain Overlay - Darker for light theme visibility */}
+        {/* Background Noise/Grain Overlay */}
         <div className="fixed inset-0 pointer-events-none opacity-[0.05] z-[100] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
         
         <Navbar />
@@ -48,16 +44,16 @@ const App: React.FC = () => {
         <main className="relative z-10">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/work" element={<WorkGallery />} />
+            <Route path="/work" element={<WorkPage />} />
             <Route path="/work/:id" element={<ProjectDetails />} />
-            <Route path="/contact" element={<div className="pt-20"><Contact /></div>} />
+            <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </main>
 
         <BackToTop />
         <AiAssistant />
         
-        {/* Softer background accents for light mode */}
+        {/* Softer background accents */}
         <div className="fixed inset-0 pointer-events-none z-0">
           <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-200/20 blur-[160px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
           <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-200/20 blur-[140px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
