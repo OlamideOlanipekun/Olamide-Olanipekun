@@ -39,9 +39,9 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="relative min-h-screen bg-zinc-950">
-        {/* Background Noise/Grain Overlay */}
-        <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-[100] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+      <div className="relative min-h-screen bg-zinc-50">
+        {/* Background Noise/Grain Overlay - Darker for light theme visibility */}
+        <div className="fixed inset-0 pointer-events-none opacity-[0.05] z-[100] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
         
         <Navbar />
         
@@ -57,9 +57,10 @@ const App: React.FC = () => {
         <BackToTop />
         <AiAssistant />
         
+        {/* Softer background accents for light mode */}
         <div className="fixed inset-0 pointer-events-none z-0">
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-600/5 blur-[160px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-600/5 blur-[140px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-200/20 blur-[160px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-200/20 blur-[140px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
         </div>
       </div>
     </BrowserRouter>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 const BackToTop: React.FC = () => {
@@ -27,12 +26,12 @@ const BackToTop: React.FC = () => {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-6 left-6 z-50 p-4 bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 text-zinc-400 rounded-full shadow-2xl transition-all duration-300 hover:text-white hover:bg-zinc-800 hover:scale-110 hover:-translate-y-1 ${
+      className={`fixed bottom-6 left-6 z-50 p-4 bg-white/80 backdrop-blur-xl border border-zinc-200 text-zinc-400 rounded-full shadow-2xl transition-all duration-300 hover:text-zinc-900 hover:bg-white hover:scale-110 hover:-translate-y-1 ${
         isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-50 pointer-events-none'
       }`}
       aria-label="Back to top"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" />
       </svg>
     </button>
