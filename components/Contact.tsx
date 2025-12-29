@@ -5,16 +5,46 @@ const Contact: React.FC = () => {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
+    setErrorMessage('');
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "a2150797-f858-47da-97f3-d073a14b39e0",
+          name: formState.name,
+          email: formState.email,
+          message: formState.message,
+          subject: `New Inquiry from ${formState.name} | Midtech Portfolio`,
+          from_name: "Midtech Solutions Portfolio"
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setIsSuccess(true);
+        setFormState({ name: '', email: '', message: '' });
+        // Hide success message after 5 seconds
+        setTimeout(() => setIsSuccess(false), 5000);
+      } else {
+        setErrorMessage(result.message || "Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      setErrorMessage("Could not connect to the server. Check your internet connection.");
+      console.error("Form submission error:", error);
+    } finally {
       setIsSubmitting(false);
-      setIsSuccess(true);
-      setFormState({ name: '', email: '', message: '' });
-      setTimeout(() => setIsSuccess(false), 5000);
-    }, 1500);
+    }
   };
 
   const inputClasses = "w-full bg-zinc-50 border border-zinc-200 rounded-xl sm:rounded-2xl px-5 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-zinc-900 focus:bg-white focus:-translate-y-1 focus:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] transition-all duration-300 text-sm text-zinc-900 placeholder:text-zinc-400";
@@ -82,7 +112,7 @@ const Contact: React.FC = () => {
                   </svg>
                 </div>
                 <h3 className="text-xl sm:text-2xl font-black text-zinc-900 mb-2">Inquiry Logged</h3>
-                <p className="text-zinc-500 text-sm">Our studio will review your brief and respond within 24 hours.</p>
+                <p className="text-zinc-500 text-sm">Your message has been sent. We will review your brief and respond within 24 hours.</p>
               </div>
             )}
 
@@ -93,6 +123,7 @@ const Contact: React.FC = () => {
                   <input 
                     required
                     type="text" 
+                    name="name"
                     className={inputClasses}
                     placeholder="Enter details"
                     value={formState.name}
@@ -104,6 +135,7 @@ const Contact: React.FC = () => {
                   <input 
                     required
                     type="email" 
+                    name="email"
                     className={inputClasses}
                     placeholder="name@company.com"
                     value={formState.email}
@@ -115,6 +147,7 @@ const Contact: React.FC = () => {
                 <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 group-focus-within/field:text-zinc-900 transition-colors duration-300">Project Brief</label>
                 <textarea 
                   required
+                  name="message"
                   rows={4}
                   className={inputClasses + " resize-none"}
                   placeholder="Tell us about your technical requirements..."
@@ -122,6 +155,13 @@ const Contact: React.FC = () => {
                   onChange={e => setFormState({...formState, message: e.target.value})}
                 ></textarea>
               </div>
+
+              {errorMessage && (
+                <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-[11px] font-bold uppercase tracking-wider animate-shake">
+                  {errorMessage}
+                </div>
+              )}
+
               <button 
                 type="submit" 
                 disabled={isSubmitting}
