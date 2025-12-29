@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.tsx';
 import Hero from './components/Hero.tsx';
@@ -11,6 +11,7 @@ import BackToTop from './components/BackToTop.tsx';
 import ProjectDetails from './ProjectDetails.tsx';
 import WorkPage from './pages/WorkPage.tsx';
 import ContactPage from './pages/ContactPage.tsx';
+import Preloader from './components/Preloader.tsx';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -32,8 +33,21 @@ const Home = () => (
 );
 
 const App: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Lock scroll while loading
+    if (loading) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [loading]);
+
   return (
     <BrowserRouter>
+      {loading && <Preloader onComplete={() => setLoading(false)} />}
+      
       <ScrollToTop />
       <div className="relative min-h-screen bg-zinc-50">
         {/* Background Noise/Grain Overlay */}
