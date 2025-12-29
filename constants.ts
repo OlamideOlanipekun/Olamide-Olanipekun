@@ -1,8 +1,8 @@
 import { Project, Skill, Experience } from './types';
 
 export const SOCIAL_LINKS = {
-  github: 'https://github.com/olamideolanipekun',
-  linkedin: 'https://linkedin.com/in/olamide-olanipekun',
+  github: 'https://github.com/OlamideOlanipekun',
+  linkedin: 'https://www.linkedin.com/in/olamide-olanipekun-855856378/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
   twitter: 'https://twitter.com/olamide_dev',
   email: 'mailto:olamideolanipekun75@gmail.com',
   whatsapp: 'https://wa.me/2349129997137'
@@ -19,7 +19,7 @@ export const PROJECTS: Project[] = [
     year: '2024',
     imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop',
     link: 'https://wavecrestfinancial.net/',
-    github: 'https://github.com/olamideolanipekun/wavecrest-finance'
+    github: 'https://github.com/OlamideOlanipekun/wavecrest-finance'
   },
   {
     id: '2',
@@ -31,7 +31,7 @@ export const PROJECTS: Project[] = [
     year: '2024',
     imageUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=800&auto=format&fit=crop',
     link: 'https://quantumftxchain.com/',
-    github: 'https://github.com/olamideolanipekun/quantum-chain'
+    github: 'https://github.com/OlamideOlanipekun/quantum-chain'
   },
   {
     id: '3',
@@ -43,7 +43,7 @@ export const PROJECTS: Project[] = [
     year: '2023',
     imageUrl: 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=800&auto=format&fit=crop',
     link: 'https://rocketenglish.ru/',
-    github: 'https://github.com/olamideolanipekun/rocket-english'
+    github: 'https://github.com/OlamideOlanipekun/rocket-english'
   },
   {
     id: '4',
@@ -55,7 +55,7 @@ export const PROJECTS: Project[] = [
     year: '2024',
     imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop',
     link: '#',
-    github: 'https://github.com/olamideolanipekun/ai-assistant-core'
+    github: 'https://github.com/OlamideOlanipekun/ai-assistant-core'
   },
   {
     id: '5',
@@ -67,7 +67,7 @@ export const PROJECTS: Project[] = [
     year: '2023',
     imageUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=800&auto=format&fit=crop',
     link: '#',
-    github: 'https://github.com/olamideolanipekun/nova-wallet'
+    github: 'https://github.com/OlamideOlanipekun/nova-wallet'
   },
   {
     id: '6',
@@ -79,7 +79,7 @@ export const PROJECTS: Project[] = [
     year: '2023',
     imageUrl: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=800&auto=format&fit=crop',
     link: '#',
-    github: 'https://github.com/olamideolanipekun/echo-branding'
+    github: 'https://github.com/OlamideOlanipekun/echo-branding'
   }
 ];
 
