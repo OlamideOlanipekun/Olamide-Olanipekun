@@ -4,12 +4,27 @@ import { ChatMessage } from '../types.ts';
 
 const AiAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'assistant', content: "Welcome to Midtech Solutions. I'm the studio's AI concierge. How can I help you explore Olamide's work or our studio's capabilities today?" }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 400) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+        setIsOpen(false); // Auto-close if we scroll back to top
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -39,7 +54,9 @@ const AiAssistant: React.FC = () => {
     <>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 p-4 bg-zinc-900 text-white rounded-2xl shadow-2xl hover:bg-zinc-800 transition-all hover:scale-105 active:scale-95 group flex items-center gap-3"
+        className={`fixed bottom-6 right-6 z-50 p-4 bg-zinc-900 text-white rounded-2xl shadow-2xl transition-all duration-500 hover:bg-indigo-600 hover:scale-105 active:scale-95 group flex items-center gap-3 ${
+          isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-50 pointer-events-none'
+        }`}
       >
         <div className="relative">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -1,13 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SOCIAL_LINKS } from '../constants';
 
 const WhatsAppButton: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 400) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
   return (
     <a
       href={SOCIAL_LINKS.whatsapp}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-[88px] right-6 z-50 p-4 bg-[#25D366] text-white rounded-2xl shadow-2xl hover:bg-[#1ebc56] transition-all hover:scale-110 active:scale-95 group flex items-center gap-3 overflow-hidden"
+      className={`fixed bottom-[88px] right-6 z-50 p-4 bg-[#25D366] text-white rounded-2xl shadow-2xl transition-all duration-500 hover:bg-[#1ebc56] hover:scale-110 active:scale-95 group flex items-center gap-3 overflow-hidden ${
+        isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-50 pointer-events-none'
+      }`}
       aria-label="Chat on WhatsApp"
     >
       <div className="relative z-10">
