@@ -12,6 +12,7 @@ import ProjectDetails from './ProjectDetails.tsx';
 import WorkPage from './pages/WorkPage.tsx';
 import ContactPage from './pages/ContactPage.tsx';
 import Preloader from './components/Preloader.tsx';
+import WhatsAppButton from './components/WhatsAppButton.tsx';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -65,6 +66,7 @@ const App: React.FC = () => {
         </main>
 
         <BackToTop />
+        <WhatsAppButton />
         <AiAssistant />
         
         {/* Softer background accents */}

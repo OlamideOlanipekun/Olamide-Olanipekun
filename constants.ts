@@ -4,7 +4,8 @@ export const SOCIAL_LINKS = {
   github: 'https://github.com/olamideolanipekun',
   linkedin: 'https://linkedin.com/in/olamide-olanipekun',
   twitter: 'https://twitter.com/olamide_dev',
-  email: 'mailto:olamideolanipekun75@gmail.com'
+  email: 'mailto:olamideolanipekun75@gmail.com',
+  whatsapp: 'https://wa.me/2349129997137'
 };
 
 export const PROJECTS: Project[] = [
