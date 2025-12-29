@@ -1,11 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Hero: React.FC = () => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <section className="relative min-h-[100svh] flex items-center pt-24 pb-12 overflow-hidden bg-zinc-50">
-      {/* Background Orbs */}
-      <div className="absolute top-1/4 -left-20 w-64 h-64 sm:w-80 sm:h-80 bg-indigo-100 rounded-full mix-blend-multiply filter blur-[80px] sm:blur-[120px] opacity-40 animate-blob"></div>
-      <div className="absolute top-1/3 -right-20 w-64 h-64 sm:w-80 sm:h-80 bg-purple-100 rounded-full mix-blend-multiply filter blur-[80px] sm:blur-[120px] opacity-40 animate-blob animation-delay-2000"></div>
+      {/* Background Parallax Orbs */}
+      <div 
+        className="absolute top-1/4 -left-20 w-64 h-64 sm:w-80 sm:h-80 bg-indigo-100 rounded-full mix-blend-multiply filter blur-[80px] sm:blur-[120px] opacity-40 animate-blob transition-transform duration-300 ease-out pointer-events-none"
+        style={{ transform: `translateY(${scrollY * 0.15}px)` }}
+      ></div>
+      <div 
+        className="absolute top-1/3 -right-20 w-64 h-64 sm:w-80 sm:h-80 bg-purple-100 rounded-full mix-blend-multiply filter blur-[80px] sm:blur-[120px] opacity-40 animate-blob animation-delay-2000 transition-transform duration-500 ease-out pointer-events-none"
+        style={{ transform: `translateY(${scrollY * -0.1}px)` }}
+      ></div>
       
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
         <div className="max-w-4xl">
@@ -31,16 +47,24 @@ const Hero: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-5 animate-fade-up [animation-delay:600ms]">
             <a 
               href="#projects" 
-              className="px-10 py-5 bg-zinc-900 hover:bg-zinc-800 active:scale-95 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-3 shadow-2xl shadow-zinc-900/10"
+              className="group px-10 py-5 bg-zinc-900 hover:bg-zinc-800 active:scale-95 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-3 shadow-2xl shadow-zinc-900/10 hover:shadow-indigo-600/20 hover:-translate-y-1"
             >
               View Studio Work
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="18" 
+                height="18" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+                className="transition-transform duration-300 group-hover:translate-x-2"
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </a>
             <a 
               href="#contact" 
-              className="px-10 py-5 bg-white hover:bg-zinc-50 border border-zinc-200 active:scale-95 text-zinc-900 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center shadow-sm"
+              className="px-10 py-5 bg-white hover:bg-zinc-50 border border-zinc-200 active:scale-95 text-zinc-900 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center shadow-sm hover:border-zinc-300"
             >
               Studio Inquiry
             </a>
