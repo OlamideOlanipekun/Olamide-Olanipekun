@@ -17,6 +17,8 @@ const Contact: React.FC = () => {
     }, 1500);
   };
 
+  const inputClasses = "w-full bg-zinc-50 border border-zinc-200 rounded-xl sm:rounded-2xl px-5 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-zinc-900 focus:bg-white focus:-translate-y-1 focus:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)] transition-all duration-300 text-sm text-zinc-900 placeholder:text-zinc-400";
+
   return (
     <section id="contact" className="py-20 sm:py-24 md:py-32 bg-zinc-50">
       <div className="max-w-7xl mx-auto px-6">
@@ -86,35 +88,35 @@ const Contact: React.FC = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8 relative z-10">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Company / Name</label>
+                <div className="space-y-2 group/field">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 group-focus-within/field:text-zinc-900 transition-colors duration-300">Company / Name</label>
                   <input 
                     required
                     type="text" 
-                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl sm:rounded-2xl px-5 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-zinc-900 focus:bg-white transition-all text-sm text-zinc-900"
+                    className={inputClasses}
                     placeholder="Enter details"
                     value={formState.name}
                     onChange={e => setFormState({...formState, name: e.target.value})}
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Corporate Email</label>
+                <div className="space-y-2 group/field">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 group-focus-within/field:text-zinc-900 transition-colors duration-300">Corporate Email</label>
                   <input 
                     required
                     type="email" 
-                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl sm:rounded-2xl px-5 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-zinc-900 focus:bg-white transition-all text-sm text-zinc-900"
+                    className={inputClasses}
                     placeholder="name@company.com"
                     value={formState.email}
                     onChange={e => setFormState({...formState, email: e.target.value})}
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Project Brief</label>
+              <div className="space-y-2 group/field">
+                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 group-focus-within/field:text-zinc-900 transition-colors duration-300">Project Brief</label>
                 <textarea 
                   required
                   rows={4}
-                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl sm:rounded-2xl px-5 sm:px-6 py-3 sm:py-4 focus:outline-none focus:border-zinc-900 focus:bg-white transition-all resize-none text-sm text-zinc-900"
+                  className={inputClasses + " resize-none"}
                   placeholder="Tell us about your technical requirements..."
                   value={formState.message}
                   onChange={e => setFormState({...formState, message: e.target.value})}
