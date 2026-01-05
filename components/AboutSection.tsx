@@ -19,7 +19,7 @@ const AboutSection: React.FC = () => {
             
             <div className="flex items-center gap-4 p-4 bg-zinc-50 rounded-2xl border border-zinc-100 max-w-fit">
               <img 
-                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop" 
+                src="image/founder.png" 
                 alt="Olamide Olanipekun" 
                 className="w-10 h-10 rounded-xl object-cover shadow-sm"
               />
