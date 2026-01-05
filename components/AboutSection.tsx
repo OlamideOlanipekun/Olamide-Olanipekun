@@ -16,11 +16,11 @@ const AboutSection: React.FC = () => {
               Beyond <br />
               <span className="text-zinc-300">The Code.</span>
             </h2>
-            
+
             <div className="flex items-center gap-4 p-4 bg-zinc-50 rounded-2xl border border-zinc-100 max-w-fit">
-              <img 
-                src="../image/Gemini_Generated_Image_5qoixk5qoixk5qoi.png" 
-                alt="Olamide Olanipekun" 
+              <img
+                src="/founder.jpg"
+                alt="Olamide Olanipekun"
                 className="w-10 h-10 rounded-xl object-cover shadow-sm"
               />
               <div className="flex flex-col">
@@ -29,7 +29,7 @@ const AboutSection: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="lg:col-span-7 space-y-10 animate-fade-up [animation-delay:200ms]">
             <p className="text-xl sm:text-2xl text-zinc-500 leading-relaxed font-medium">
               Midtech Solutions represents the intersection of technical rigor and creative intuition. Founded by Olamide Olanipekun, we don't just ship products; we architect scalable ecosystems.
@@ -38,8 +38,8 @@ const AboutSection: React.FC = () => {
               In an era of generic templates, we prioritize custom-engineered solutions. From high-stakes financial dashboards to AI-augmented interfaces, every pixel and logic gate is optimized for performance, security, and growth.
             </p>
             <div className="pt-6">
-              <Link 
-                to="/about" 
+              <Link
+                to="/about"
                 className="group inline-flex items-center gap-6 text-[11px] font-black uppercase tracking-[0.3em] text-zinc-900 hover:text-indigo-600 transition-colors"
               >
                 Read our story
