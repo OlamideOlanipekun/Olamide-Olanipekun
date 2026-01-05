@@ -19,7 +19,7 @@ const AboutSection: React.FC = () => {
             
             <div className="flex items-center gap-4 p-4 bg-zinc-50 rounded-2xl border border-zinc-100 max-w-fit">
               <img 
-                src="image/Gemini_Generated_Image_5qoixk5qoixk5qoi.png" 
+                src="../image/Gemini_Generated_Image_5qoixk5qoixk5qoi.png" 
                 alt="Olamide Olanipekun" 
                 className="w-10 h-10 rounded-xl object-cover shadow-sm"
               />
