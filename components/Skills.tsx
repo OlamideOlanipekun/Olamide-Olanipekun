@@ -51,7 +51,7 @@ const Skills: React.FC = () => {
           <div className="flex gap-4">
              <div className="px-5 py-3 bg-white border border-zinc-200 rounded-2xl shadow-sm flex items-center gap-3">
                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-               <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Current Focus: AI Native Apps</span>
+               <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Stack: AI Native</span>
              </div>
           </div>
         </div>
@@ -71,10 +71,10 @@ const Skills: React.FC = () => {
                   {skill.icon}
                 </div>
                 <div className="flex flex-col items-end">
-                  <span className="text-[8px] font-black text-indigo-600 uppercase tracking-widest px-2 py-1 bg-indigo-50 rounded-md mb-1">Advanced</span>
+                  <span className="text-[8px] font-black text-indigo-600 uppercase tracking-widest px-2 py-1 bg-indigo-50 rounded-md mb-1">Production</span>
                   <div className="flex gap-1">
                     {[1, 2, 3].map(i => (
-                      <div key={i} className={`w-1 h-1 rounded-full ${i <= 3 ? 'bg-indigo-600/30' : 'bg-zinc-200'}`}></div>
+                      <div key={i} className="w-1 h-1 rounded-full bg-indigo-600"></div>
                     ))}
                   </div>
                 </div>
@@ -95,7 +95,7 @@ const Skills: React.FC = () => {
                 </div>
                 
                 <div className="pt-4 border-t border-zinc-100 flex items-center justify-between">
-                  <span className="text-[7px] font-black uppercase tracking-[0.2em] text-zinc-300 group-hover:text-zinc-400 transition-colors">Status: Optimized</span>
+                  <span className="text-[7px] font-black uppercase tracking-[0.2em] text-zinc-300 group-hover:text-zinc-400 transition-colors">Performance: A+</span>
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 opacity-40 group-hover:opacity-100 transition-opacity"></div>
                 </div>
               </div>
