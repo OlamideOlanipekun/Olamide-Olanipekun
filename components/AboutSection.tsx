@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import founderImage from '../assets/founder.jpg';
+
 const AboutSection: React.FC = () => {
   return (
     <section className="py-24 sm:py-32 bg-white relative overflow-hidden">
@@ -19,7 +21,7 @@ const AboutSection: React.FC = () => {
 
             <div className="flex items-center gap-4 p-4 bg-zinc-50 rounded-2xl border border-zinc-100 max-w-fit">
               <img
-                src="/founder.jpg"
+                src={founderImage}
                 alt="Olamide Olanipekun"
                 className="w-10 h-10 rounded-xl object-cover shadow-sm"
               />
