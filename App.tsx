@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.tsx';
 import Hero from './components/Hero.tsx';
+import AboutSection from './components/AboutSection.tsx';
 import Projects from './components/Projects.tsx';
 import Skills from './components/Skills.tsx';
 import Experience from './components/Experience.tsx';
@@ -10,6 +11,7 @@ import AiAssistant from './components/AiAssistant.tsx';
 import BackToTop from './components/BackToTop.tsx';
 import ProjectDetails from './ProjectDetails.tsx';
 import WorkPage from './pages/WorkPage.tsx';
+import AboutPage from './pages/AboutPage.tsx';
 import ContactPage from './pages/ContactPage.tsx';
 import Preloader from './components/Preloader.tsx';
 import WhatsAppButton from './components/WhatsAppButton.tsx';
@@ -26,6 +28,7 @@ const ScrollToTop = () => {
 const Home = () => (
   <>
     <Hero />
+    <AboutSection />
     <Projects limit={3} />
     <Skills />
     <Experience />
@@ -59,6 +62,7 @@ const App: React.FC = () => {
         <main className="relative z-10">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route path="/work" element={<WorkPage />} />
             <Route path="/work/:id" element={<ProjectDetails />} />
             <Route path="/contact" element={<ContactPage />} />
