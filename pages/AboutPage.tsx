@@ -46,7 +46,7 @@ const AboutPage: React.FC = () => {
             <div className="relative animate-fade-up [animation-delay:200ms]">
               <div className="aspect-[4/5] rounded-[3rem] overflow-hidden bg-zinc-200 shadow-3xl relative group border-8 border-white">
                 <img 
-                  src="image/founder.png" 
+                  src="Gemini_Generated_Image_5qoixk5qoixk5qoi.png" 
                   alt="Olamide Olanipekun - Founder" 
                   className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                 />
