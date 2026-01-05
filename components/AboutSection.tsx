@@ -16,6 +16,18 @@ const AboutSection: React.FC = () => {
               Beyond <br />
               <span className="text-zinc-300">The Code.</span>
             </h2>
+            
+            <div className="flex items-center gap-4 p-4 bg-zinc-50 rounded-2xl border border-zinc-100 max-w-fit">
+              <img 
+                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop" 
+                alt="Olamide Olanipekun" 
+                className="w-10 h-10 rounded-xl object-cover shadow-sm"
+              />
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black text-zinc-900 uppercase tracking-widest leading-tight">Olamide Olanipekun</span>
+                <span className="text-[8px] font-bold text-zinc-400 uppercase tracking-widest">Founder & Technical Director</span>
+              </div>
+            </div>
           </div>
           
           <div className="lg:col-span-7 space-y-10 animate-fade-up [animation-delay:200ms]">
