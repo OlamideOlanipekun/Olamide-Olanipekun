@@ -13,6 +13,7 @@ import ProjectDetails from './ProjectDetails.tsx';
 import WorkPage from './pages/WorkPage.tsx';
 import AboutPage from './pages/AboutPage.tsx';
 import ContactPage from './pages/ContactPage.tsx';
+import AdminDashboard from './pages/AdminDashboard.tsx';
 import Preloader from './components/Preloader.tsx';
 import WhatsAppButton from './components/WhatsAppButton.tsx';
 
@@ -57,7 +58,11 @@ const App: React.FC = () => {
         {/* Background Noise/Grain Overlay */}
         <div className="fixed inset-0 pointer-events-none opacity-[0.05] z-[100] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
         
-        <Navbar />
+        {/* Conditionally render navbar so it doesn't appear on Admin */}
+        <Routes>
+          <Route path="/admin" element={null} />
+          <Route path="*" element={<Navbar />} />
+        </Routes>
         
         <main className="relative z-10">
           <Routes>
@@ -66,12 +71,20 @@ const App: React.FC = () => {
             <Route path="/work" element={<WorkPage />} />
             <Route path="/work/:id" element={<ProjectDetails />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Routes>
         </main>
 
-        <BackToTop />
-        <WhatsAppButton />
-        <AiAssistant />
+        <Routes>
+          <Route path="/admin" element={null} />
+          <Route path="*" element={
+            <>
+              <BackToTop />
+              <WhatsAppButton />
+              <AiAssistant />
+            </>
+          } />
+        </Routes>
         
         {/* Softer background accents */}
         <div className="fixed inset-0 pointer-events-none z-0">

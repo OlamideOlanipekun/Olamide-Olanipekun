@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { SOCIAL_LINKS } from '../constants';
 
 const Contact: React.FC = () => {
@@ -186,9 +187,10 @@ const Contact: React.FC = () => {
           <div className="text-zinc-400 text-[9px] sm:text-[10px] font-black tracking-[0.3em] uppercase text-center md:text-left">
             © {new Date().getFullYear()} Midtech Solutions. Lead by Olamide Olanipekun.
           </div>
-          <div className="flex gap-6 sm:gap-10">
+          <div className="flex gap-6 sm:gap-10 items-center">
             <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 transition-colors text-[9px] sm:text-[10px] font-black uppercase tracking-widest">LinkedIn</a>
             <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 transition-colors text-[9px] sm:text-[10px] font-black uppercase tracking-widest">GitHub</a>
+            <Link to="/admin" className="ml-4 text-[7px] text-zinc-200 hover:text-zinc-400 transition-colors font-black uppercase tracking-widest border border-zinc-100/10 px-2 py-1 rounded">Admin</Link>
           </div>
         </div>
       </div>
