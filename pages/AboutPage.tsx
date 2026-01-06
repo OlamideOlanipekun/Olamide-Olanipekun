@@ -1,5 +1,5 @@
 import React from 'react';
-import founderImage from '../assets/founder.png';
+import founderImage from '../assets/founder.jpg';
 
 const AboutPage: React.FC = () => {
   return (

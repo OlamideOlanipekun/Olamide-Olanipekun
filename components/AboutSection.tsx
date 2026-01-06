@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import founderImage from '../assets/founder.png';
+import founderImage from '../assets/founder.jpg';
 
 const AboutSection: React.FC = () => {
   return (
