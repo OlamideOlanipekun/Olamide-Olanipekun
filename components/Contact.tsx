@@ -60,7 +60,7 @@ const Contact: React.FC = () => {
               Launch your <br />
               <span className="text-zinc-300">vision here.</span>
             </p>
-            
+
             <p className="text-base sm:text-lg text-zinc-600 mb-10 sm:mb-14 leading-relaxed max-w-md">
               Midtech Solutions is currently accepting high-impact project partnerships for 2025 and beyond. We specialize in digital transformation.
             </p>
@@ -81,7 +81,7 @@ const Contact: React.FC = () => {
               <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 sm:gap-6 group max-w-full sm:max-w-fit">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white border border-zinc-200 rounded-xl sm:rounded-2xl flex items-center justify-center group-hover:bg-[#25D366] group-hover:border-[#25D366] transition-all shadow-sm flex-shrink-0">
                   <svg className="text-zinc-400 group-hover:text-white transition-colors" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.408 0 12.046c0 2.121.54 4.19 1.57 6.05L0 24l6.117-1.605a11.803 11.803 0 005.925 1.586h.005c6.632 0 12.042-5.411 12.047-12.05a11.755 11.755 0 00-3.517-8.422z"/>
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.408 0 12.046c0 2.121.54 4.19 1.57 6.05L0 24l6.117-1.605a11.803 11.803 0 005.925 1.586h.005c6.632 0 12.042-5.411 12.047-12.05a11.755 11.755 0 00-3.517-8.422z" />
                   </svg>
                 </div>
                 <div className="min-w-0">
@@ -121,39 +121,39 @@ const Contact: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
                 <div className="space-y-2 group/field">
                   <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 group-focus-within/field:text-zinc-900 transition-colors duration-300">Company / Name</label>
-                  <input 
+                  <input
                     required
-                    type="text" 
+                    type="text"
                     name="name"
                     className={inputClasses}
                     placeholder="Enter details"
                     value={formState.name}
-                    onChange={e => setFormState({...formState, name: e.target.value})}
+                    onChange={e => setFormState({ ...formState, name: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2 group/field">
                   <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 group-focus-within/field:text-zinc-900 transition-colors duration-300">Corporate Email</label>
-                  <input 
+                  <input
                     required
-                    type="email" 
+                    type="email"
                     name="email"
                     className={inputClasses}
                     placeholder="name@company.com"
                     value={formState.email}
-                    onChange={e => setFormState({...formState, email: e.target.value})}
+                    onChange={e => setFormState({ ...formState, email: e.target.value })}
                   />
                 </div>
               </div>
               <div className="space-y-2 group/field">
                 <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1 group-focus-within/field:text-zinc-900 transition-colors duration-300">Project Brief</label>
-                <textarea 
+                <textarea
                   required
                   name="message"
                   rows={4}
                   className={inputClasses + " resize-none"}
                   placeholder="Tell us about your technical requirements..."
                   value={formState.message}
-                  onChange={e => setFormState({...formState, message: e.target.value})}
+                  onChange={e => setFormState({ ...formState, message: e.target.value })}
                 ></textarea>
               </div>
 
@@ -163,8 +163,8 @@ const Contact: React.FC = () => {
                 </div>
               )}
 
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={isSubmitting}
                 className="w-full py-4 sm:py-5 bg-zinc-900 hover:bg-black text-white font-black uppercase tracking-[0.2em] rounded-xl sm:rounded-2xl transition-all flex items-center justify-center gap-3 sm:gap-4 disabled:opacity-50 shadow-xl shadow-zinc-900/10 active:scale-[0.98]"
               >
@@ -190,7 +190,6 @@ const Contact: React.FC = () => {
           <div className="flex gap-6 sm:gap-10 items-center">
             <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 transition-colors text-[9px] sm:text-[10px] font-black uppercase tracking-widest">LinkedIn</a>
             <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 transition-colors text-[9px] sm:text-[10px] font-black uppercase tracking-widest">GitHub</a>
-            <Link to="/admin" className="ml-4 text-[7px] text-zinc-200 hover:text-zinc-400 transition-colors font-black uppercase tracking-widest border border-zinc-100/10 px-2 py-1 rounded">Admin</Link>
           </div>
         </div>
       </div>
