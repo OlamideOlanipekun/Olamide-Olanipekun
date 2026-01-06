@@ -1,4 +1,5 @@
 import React from 'react';
+import founderImage from '../assets/founder.png';
 
 const AboutPage: React.FC = () => {
   return (
@@ -29,7 +30,7 @@ const AboutPage: React.FC = () => {
             <div className="animate-fade-up">
               <h2 className="text-indigo-600 text-[10px] font-black uppercase tracking-[0.5em] mb-8">The Founder</h2>
               <div className="flex items-center gap-4 mb-10">
-                 <h3 className="text-4xl sm:text-6xl font-black tracking-tighter text-zinc-900 leading-[0.9]">
+                <h3 className="text-4xl sm:text-6xl font-black tracking-tighter text-zinc-900 leading-[0.9]">
                   Olamide <br />
                   Olanipekun<span className="text-zinc-300">.</span>
                 </h3>
@@ -45,13 +46,13 @@ const AboutPage: React.FC = () => {
             </div>
             <div className="relative animate-fade-up [animation-delay:200ms]">
               <div className="aspect-[4/5] rounded-[3rem] overflow-hidden bg-zinc-200 shadow-3xl relative group border-8 border-white">
-                <img 
-                  src="Gemini_Generated_Image_5qoixk5qoixk5qoi.png" 
-                  alt="Olamide Olanipekun - Founder" 
+                <img
+                  src={founderImage}
+                  alt="Olamide Olanipekun - Founder"
                   className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/60 via-transparent to-transparent opacity-60"></div>
-                
+
                 {/* Visual Label */}
                 <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
                   <div className="px-4 py-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl">
@@ -59,7 +60,7 @@ const AboutPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               {/* Floating Stat */}
               <div className="absolute -bottom-10 -left-10 p-10 bg-white border border-zinc-200 rounded-[2.5rem] shadow-3xl hidden md:block group">
                 <div className="text-4xl font-black text-indigo-600 mb-1 tracking-tighter group-hover:scale-110 transition-transform">B.Sc.</div>
@@ -77,7 +78,7 @@ const AboutPage: React.FC = () => {
             <h2 className="text-indigo-600 text-[10px] font-black uppercase tracking-[0.5em] mb-6">Our DNA</h2>
             <p className="text-4xl sm:text-6xl font-black tracking-tighter text-zinc-900">Engineering with Intent.</p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { title: 'Technical Rigor', desc: 'No shortcuts. We prioritize strict typing, modular architecture, and comprehensive documentation in every build.' },
@@ -101,8 +102,8 @@ const AboutPage: React.FC = () => {
         <div className="p-16 md:p-24 bg-zinc-900 rounded-[4rem] text-center relative overflow-hidden group">
           <div className="absolute inset-0 bg-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
           <h2 className="text-4xl md:text-6xl font-black text-white mb-10 tracking-tighter">Ready to architect?</h2>
-          <a 
-            href="/contact" 
+          <a
+            href="/contact"
             className="inline-flex items-center gap-6 px-14 py-6 bg-white text-zinc-900 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] hover:bg-indigo-600 hover:text-white transition-all shadow-2xl"
           >
             Start Project Brief
