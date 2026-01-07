@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../utils/api';
 import { supabase } from '../utils/supabaseClient';
+import AdminSidebar from '../components/AdminSidebar';
 import { SKILLS } from '../constants';
 
 interface Project {
@@ -226,48 +227,12 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-zinc-50 flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-zinc-200 hidden lg:flex flex-col sticky top-0 h-screen">
-        <div className="p-8 border-b border-zinc-100 flex items-center gap-3">
-          <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center text-white font-black text-xs">M</div>
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-900">Midtech</div>
-            <div className="text-[8px] font-bold uppercase tracking-widest text-zinc-400">Control Center</div>
-          </div>
-        </div>
-
-        <nav className="flex-1 p-4 space-y-1">
-          {sidebarLinks.map((link) => (
-            <button
-              key={link.id}
-              onClick={() => setActiveTab(link.id as any)}
-              className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all ${activeTab === link.id
-                ? 'bg-zinc-900 text-white shadow-lg shadow-zinc-900/10'
-                : 'text-zinc-400 hover:text-zinc-900 hover:bg-zinc-50'
-                }`}
-            >
-              <span>{link.icon}</span>
-              {link.label}
-            </button>
-          ))}
-        </nav>
-
-        <div className="p-6 border-t border-zinc-100 flex flex-col gap-4">
-          <div className="flex items-center gap-3 p-3 bg-zinc-50 rounded-xl border border-zinc-100">
-            <img src="/assets/founder.png" className="w-8 h-8 rounded-lg object-cover" alt="Admin" />
-            <div className="overflow-hidden">
-              <div className="text-[9px] font-black text-zinc-900 truncate">Olamide O.</div>
-              <div className="text-[7px] font-bold text-emerald-500 uppercase tracking-widest">Master Admin</div>
-            </div>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-50 transition-all border border-transparent hover:border-red-100"
-          >
-            <span>🚪</span> Logout
-          </button>
-        </div>
-      </aside>
+      <AdminSidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        handleLogout={handleLogout}
+        links={sidebarLinks}
+      />
 
       {/* Main Content */}
       <main className="flex-1 p-6 lg:p-12 overflow-y-auto relative">
