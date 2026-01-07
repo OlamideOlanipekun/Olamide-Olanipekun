@@ -31,6 +31,7 @@ const AdminDashboard: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const fetchProjects = async () => {
     try {
@@ -58,6 +59,21 @@ const AdminDashboard: React.FC = () => {
       setSkills(data);
     } catch (error) {
       console.error('Failed to fetch skills', error);
+    }
+  };
+
+  const refreshAllData = async () => {
+    setIsRefreshing(true);
+    try {
+      await Promise.all([
+        fetchProjects(),
+        fetchInquiries(),
+        fetchSkills()
+      ]);
+    } catch (error) {
+      console.error('Refresh failed', error);
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -244,8 +260,13 @@ const AdminDashboard: React.FC = () => {
             <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest mt-1">System operational • {new Date().toLocaleDateString()}</p>
           </div>
           <div className="flex gap-4">
-            <button onClick={fetchProjects} className="px-6 py-3 bg-white border border-zinc-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-zinc-900 transition-all flex items-center gap-2">
-              <span>🔄</span> Refresh
+            <button
+              onClick={refreshAllData}
+              disabled={isRefreshing}
+              className="px-6 py-3 bg-white border border-zinc-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-zinc-900 transition-all flex items-center gap-2 disabled:opacity-50"
+            >
+              <span className={isRefreshing ? 'animate-spin' : ''}>🔄</span>
+              {isRefreshing ? 'Syncing...' : 'Refresh'}
             </button>
             <button
               onClick={() => setShowAddModal(true)}
