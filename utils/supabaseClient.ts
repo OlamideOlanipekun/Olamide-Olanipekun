@@ -2,11 +2,16 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Access environment variables securely
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('Missing Supabase URL or Anon Key');
+    console.error('CRITICAL: Missing Supabase environment variables. Check your Vercel/Local .env settings.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Provide fallback empty strings to prevent constructor crash, 
+// though actual queries will still fail until vars are provided.
+export const supabase = createClient(
+    supabaseUrl || 'https://placeholder.supabase.co',
+    supabaseAnonKey || 'placeholder'
+);
