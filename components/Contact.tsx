@@ -189,15 +189,6 @@ const Contact: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-20 sm:mt-32 pt-8 sm:pt-12 border-t border-zinc-200 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="text-zinc-400 text-[9px] sm:text-[10px] font-black tracking-[0.3em] uppercase text-center md:text-left">
-            © {new Date().getFullYear()} Midtech Solutions. Lead by Olamide Olanipekun.
-          </div>
-          <div className="flex gap-6 sm:gap-10 items-center">
-            <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 transition-colors text-[9px] sm:text-[10px] font-black uppercase tracking-widest">LinkedIn</a>
-            <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 transition-colors text-[9px] sm:text-[10px] font-black uppercase tracking-widest">GitHub</a>
-          </div>
-        </div>
       </div>
     </section>
   );
