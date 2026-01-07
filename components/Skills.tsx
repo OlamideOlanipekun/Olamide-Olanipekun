@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
-import { SKILLS } from '../constants.ts';
+import React, { useState, useEffect } from 'react';
+import { api } from '../utils/api';
 
 const Skills: React.FC = () => {
   const [downloadStatus, setDownloadStatus] = useState<'idle' | 'preparing' | 'optimizing' | 'success'>('idle');
+  const [skills, setSkills] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const data = await api.get('/skills');
+        setSkills(data);
+      } catch (error) {
+        console.error('Failed to fetch skills', error);
+      }
+    };
+    fetchSkills();
+  }, []);
 
   const handleDownloadCV = () => {
     if (downloadStatus !== 'idle') return;
 
     setDownloadStatus('preparing');
-    
+
     setTimeout(() => {
       setDownloadStatus('optimizing');
-      
+
       setTimeout(() => {
-        const resumeText = `OLAMIDE OLANIPEKUN - TECHNICAL PORTFOLIO 2024\nFull-Stack Developer & Technical Director\n\nExperience: Founder at Midtech Solutions\nEducation: B.Sc. Information Technology (NOUN)\nSkills: React, Next.js, AI Engineering, PHP, Node.js\n\nContact: olamideolanipekun75@gmail.com`.trim(); 
+        const resumeText = `OLAMIDE OLANIPEKUN - TECHNICAL PORTFOLIO 2024\nFull-Stack Developer & Technical Director\n\nExperience: Founder at Midtech Solutions\nEducation: B.Sc. Information Technology (NOUN)\nSkills: ${skills.map(s => s.name).join(', ')}\n\nContact: olamideolanipekun75@gmail.com`.trim();
         const blob = new Blob([resumeText], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -23,7 +36,7 @@ const Skills: React.FC = () => {
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-        
+
         setDownloadStatus('success');
         setTimeout(() => setDownloadStatus('idle'), 3000);
       }, 1000);
@@ -47,25 +60,25 @@ const Skills: React.FC = () => {
               Architecting solutions with a stack that prioritizes performance, scalability, and seamless AI integration.
             </p>
           </div>
-          
+
           <div className="flex gap-4">
-             <div className="px-5 py-3 bg-white border border-zinc-200 rounded-2xl shadow-sm flex items-center gap-3">
-               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-               <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Stack: AI Native</span>
-             </div>
+            <div className="px-5 py-3 bg-white border border-zinc-200 rounded-2xl shadow-sm flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Stack: AI Native</span>
+            </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {SKILLS.map((skill, idx) => (
-            <div 
-              key={skill.name} 
+          {skills.map((skill, idx) => (
+            <div
+              key={skill.id || idx}
               className={`p-8 bg-white border border-zinc-200 rounded-[2.5rem] hover:border-indigo-600/40 transition-all group flex flex-col shadow-sm hover:shadow-2xl hover:shadow-indigo-600/10 hover:-translate-y-2 relative overflow-hidden animate-fade-up h-full`}
               style={{ animationDelay: `${idx * 50}ms` }}
             >
               {/* Background Glow */}
               <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50/40 blur-[40px] rounded-full translate-x-1/2 -translate-y-1/2 group-hover:bg-indigo-100/60 transition-colors"></div>
-              
+
               <div className="flex justify-between items-start mb-10">
                 <div className="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center text-2xl group-hover:bg-zinc-900 group-hover:text-white transition-all duration-500 shadow-inner border border-zinc-100">
                   {skill.icon}
@@ -79,12 +92,12 @@ const Skills: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="mb-6">
                 <div className="text-[9px] text-zinc-400 font-bold uppercase tracking-[0.3em] mb-2">{skill.category}</div>
                 <h3 className="text-xl font-black text-zinc-900 tracking-tight leading-none group-hover:text-indigo-600 transition-colors">{skill.name}</h3>
               </div>
-              
+
               <div className="mt-auto space-y-4">
                 <div className="flex flex-wrap gap-1.5">
                   {skill.tags?.map(tag => (
@@ -93,7 +106,7 @@ const Skills: React.FC = () => {
                     </span>
                   ))}
                 </div>
-                
+
                 <div className="pt-4 border-t border-zinc-100 flex items-center justify-between">
                   <span className="text-[7px] font-black uppercase tracking-[0.2em] text-zinc-300 group-hover:text-zinc-400 transition-colors">Performance: A+</span>
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 opacity-40 group-hover:opacity-100 transition-opacity"></div>
@@ -107,7 +120,7 @@ const Skills: React.FC = () => {
         <div className="mt-20 p-8 sm:p-16 rounded-[3rem] lg:rounded-[4rem] bg-zinc-900 text-white flex flex-col lg:flex-row items-center gap-12 justify-between shadow-3xl shadow-zinc-900/40 relative overflow-hidden group">
           <div className="absolute -top-20 -right-20 w-[500px] h-[500px] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none group-hover:scale-110 transition-transform duration-1000"></div>
           <div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] bg-purple-600/10 blur-[100px] rounded-full pointer-events-none group-hover:scale-110 transition-transform duration-1000"></div>
-          
+
           <div className="flex flex-col sm:flex-row gap-8 items-center relative z-10 text-center sm:text-left">
             <div className="w-20 h-20 bg-white/10 backdrop-blur-xl rounded-[2rem] flex items-center justify-center text-3xl shrink-0 shadow-2xl border border-white/10 group-hover:rotate-12 transition-all duration-500 group-hover:scale-110">
               ⚡
@@ -118,14 +131,13 @@ const Skills: React.FC = () => {
             </div>
           </div>
 
-          <button 
+          <button
             onClick={handleDownloadCV}
             disabled={downloadStatus !== 'idle'}
-            className={`relative z-10 w-full lg:w-auto px-16 py-6 font-black uppercase tracking-[0.25em] text-[12px] rounded-2xl transition-all duration-500 flex items-center justify-center gap-5 disabled:opacity-90 shadow-[0_20px_40px_rgba(0,0,0,0.3)] active:scale-[0.96] overflow-hidden ${
-              downloadStatus === 'success' 
-                ? 'bg-emerald-500 text-white' 
+            className={`relative z-10 w-full lg:w-auto px-16 py-6 font-black uppercase tracking-[0.25em] text-[12px] rounded-2xl transition-all duration-500 flex items-center justify-center gap-5 disabled:opacity-90 shadow-[0_20px_40px_rgba(0,0,0,0.3)] active:scale-[0.96] overflow-hidden ${downloadStatus === 'success'
+                ? 'bg-emerald-500 text-white'
                 : 'bg-white text-zinc-900 hover:bg-zinc-100 hover:shadow-white/10'
-            }`}
+              }`}
           >
             {downloadStatus === 'idle' && (
               <>
@@ -135,7 +147,7 @@ const Skills: React.FC = () => {
                 <span>Download PDF</span>
               </>
             )}
-            
+
             {(downloadStatus === 'preparing' || downloadStatus === 'optimizing') && (
               <>
                 <div className="w-5 h-5 border-[3px] border-zinc-900/20 border-t-zinc-900 rounded-full animate-spin"></div>

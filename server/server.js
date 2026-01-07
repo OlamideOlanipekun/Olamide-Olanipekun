@@ -11,6 +11,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/projects', require('./routes/projects'));
+app.use('/api/inquiries', require('./routes/inquiries'));
+app.use('/api/skills', require('./routes/skills'));
 
 // Base Route
 app.get('/', (req, res) => {

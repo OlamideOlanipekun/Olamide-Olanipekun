@@ -6,8 +6,23 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // Use Service Role K
 
 if (!supabaseUrl || !supabaseKey) {
     console.error('Missing Supabase URL or Key in .env');
+} else {
+    console.log('Supabase URL:', supabaseUrl);
+    console.log('FULL Supabase Key:', supabaseKey);
+    // Decode JWT to check role
+    try {
+        const payload = JSON.parse(Buffer.from(supabaseKey.split('.')[1], 'base64').toString());
+        console.log('JWT Role:', payload.role);
+    } catch (e) {
+        console.log('Could not decode JWT');
+    }
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey, {
+    auth: {
+        autoRefreshToken: false,
+        persistSession: false
+    }
+});
 
 module.exports = supabase;

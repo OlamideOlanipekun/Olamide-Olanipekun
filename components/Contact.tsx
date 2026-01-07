@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SOCIAL_LINKS } from '../constants';
+import { api } from '../utils/api';
 
 const Contact: React.FC = () => {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
@@ -14,7 +15,15 @@ const Contact: React.FC = () => {
     setErrorMessage('');
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      // Execute both Database Save and Web3Forms Email in parallel
+      const dbRequest = api.post('/inquiries', {
+        name: formState.name,
+        email: formState.email,
+        message: formState.message,
+        subject: `New Inquiry from ${formState.name} | Midtech Portfolio`
+      });
+
+      const web3FormsRequest = fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,18 +39,15 @@ const Contact: React.FC = () => {
         }),
       });
 
-      const result = await response.json();
+      await Promise.all([dbRequest, web3FormsRequest]);
 
-      if (result.success) {
-        setIsSuccess(true);
-        setFormState({ name: '', email: '', message: '' });
-        // Hide success message after 5 seconds
-        setTimeout(() => setIsSuccess(false), 5000);
-      } else {
-        setErrorMessage(result.message || "Something went wrong. Please try again.");
-      }
-    } catch (error) {
-      setErrorMessage("Could not connect to the server. Check your internet connection.");
+      setIsSuccess(true);
+      setFormState({ name: '', email: '', message: '' });
+      // Hide success message after 5 seconds
+      setTimeout(() => setIsSuccess(false), 5000);
+
+    } catch (error: any) {
+      setErrorMessage(error.message || "Could not connect to the server. Check your internet connection.");
       console.error("Form submission error:", error);
     } finally {
       setIsSubmitting(false);

@@ -1,6 +1,19 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { PROJECTS } from '../constants.ts';
+import { api } from '../utils/api';
+
+interface Project {
+  id: string;
+  title: string;
+  category: string;
+  status: string;
+  image_url: string;
+  repo_link?: string;
+  live_link?: string;
+  tags?: string[];
+  description?: string;
+  year?: string;
+}
 
 interface ProjectsProps {
   limit?: number;
@@ -20,21 +33,46 @@ const CategoryMeta: Record<Category, string> = {
 const Projects: React.FC<ProjectsProps> = ({ limit }) => {
   const [activeCategory, setActiveCategory] = useState<Category>('All');
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
   const isWorkPage = location.pathname === '/work';
 
-  const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = { All: PROJECTS.length };
-    PROJECTS.forEach(p => {
-      counts[p.category] = (counts[p.category] || 0) + 1;
-    });
-    return counts;
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const data = await api.get('/projects');
+        // Ensure tags is always an array
+        const sanitizedData = data.map((p: any) => ({
+          ...p,
+          tags: p.tags || [],
+          imageUrl: p.image_url // Map snake_case from DB to camelCase if needed, or update component to use image_url
+        }));
+        setProjects(sanitizedData);
+      } catch (error) {
+        console.error('Failed to load projects', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProjects();
   }, []);
 
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { All: projects.length };
+    projects.forEach(p => {
+      const cat = p.category || 'Web'; // Default to Web if missing
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+    return counts;
+  }, [projects]);
+
   const filteredProjects = useMemo(() => {
-    let base = activeCategory === 'All' ? PROJECTS : PROJECTS.filter(p => p.category === activeCategory);
+    let base = activeCategory === 'All' ? projects : projects.filter(p => p.category === activeCategory);
     return limit ? base.slice(0, limit) : base;
-  }, [activeCategory, limit]);
+  }, [activeCategory, limit, projects]);
+
+  if (loading) return <div className="py-32 text-center text-zinc-400 text-xs font-black uppercase tracking-widest">Loading Works...</div>;
 
   return (
     <section id="projects" className={`py-24 sm:py-32 bg-white relative overflow-hidden ${isWorkPage ? 'pt-0' : ''}`}>
@@ -57,27 +95,25 @@ const Projects: React.FC<ProjectsProps> = ({ limit }) => {
               {CategoryMeta[activeCategory]}
             </p>
           </div>
-          
+
           <div className={`w-full md:w-auto overflow-x-auto no-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0 flex justify-start md:justify-end animate-fade-up [animation-delay:200ms]`}>
             <div className="flex items-center gap-1.5 p-1.5 bg-zinc-50 border border-zinc-200 rounded-2xl shadow-sm">
               {Categories.map(cat => {
                 const isActive = activeCategory === cat;
                 return (
-                  <button 
-                    key={cat} 
+                  <button
+                    key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`group relative flex items-center gap-3 px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-500 whitespace-nowrap overflow-hidden ${
-                      isActive 
-                        ? 'text-white' 
-                        : 'text-zinc-400 hover:text-zinc-900 hover:bg-white'
-                    }`}
+                    className={`group relative flex items-center gap-3 px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-500 whitespace-nowrap overflow-hidden ${isActive
+                      ? 'text-white'
+                      : 'text-zinc-400 hover:text-zinc-900 hover:bg-white'
+                      }`}
                   >
                     <span className="relative z-10">{cat}</span>
-                    <span className={`relative z-10 flex items-center justify-center min-w-[1.6rem] h-[1.6rem] text-[9px] rounded-full font-bold transition-all duration-500 ${
-                      isActive 
-                        ? 'bg-white/20 text-white' 
-                        : 'bg-zinc-200/50 text-zinc-400 group-hover:bg-zinc-100 group-hover:text-zinc-600'
-                    }`}>
+                    <span className={`relative z-10 flex items-center justify-center min-w-[1.6rem] h-[1.6rem] text-[9px] rounded-full font-bold transition-all duration-500 ${isActive
+                      ? 'bg-white/20 text-white'
+                      : 'bg-zinc-200/50 text-zinc-400 group-hover:bg-zinc-100 group-hover:text-zinc-600'
+                      }`}>
                       {categoryCounts[cat] || 0}
                     </span>
                     {isActive && (
@@ -94,21 +130,21 @@ const Projects: React.FC<ProjectsProps> = ({ limit }) => {
         <div key={activeCategory} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project, idx) => (
-              <Link 
+              <Link
                 to={`/work/${project.id}`}
-                key={project.id} 
+                key={project.id}
                 onMouseEnter={() => setHoveredId(project.id)}
                 onMouseLeave={() => setHoveredId(null)}
                 className="group relative bg-white border border-zinc-100 rounded-[2.5rem] overflow-hidden hover:border-indigo-600/20 transition-all duration-700 flex flex-col h-full animate-fade-up shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] active:scale-[0.98]"
                 style={{ animationDelay: `${idx * 80}ms` }}
               >
                 <div className="relative aspect-[16/11] overflow-hidden">
-                  <img 
-                    src={project.imageUrl} 
-                    alt={project.title} 
+                  <img
+                    src={project.imageUrl || project.image_url}
+                    alt={project.title}
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   />
-                  
+
                   {/* Category Badge on Image */}
                   <div className="absolute bottom-5 left-5 px-3 py-1 bg-white/90 backdrop-blur-md rounded-lg border border-zinc-200 shadow-sm opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
                     <span className="text-[8px] font-black tracking-[0.2em] text-zinc-900 uppercase">{project.category} Architecture</span>
@@ -117,10 +153,9 @@ const Projects: React.FC<ProjectsProps> = ({ limit }) => {
                   <div className="absolute top-5 left-5 px-3 py-1 bg-white/90 backdrop-blur-md rounded-full border border-zinc-200 shadow-sm">
                     <span className="text-[10px] font-bold tracking-widest text-zinc-900 uppercase">{project.year}</span>
                   </div>
-                  
-                  <div className={`absolute inset-0 bg-zinc-900/60 backdrop-blur-[4px] flex items-center justify-center transition-all duration-500 md:opacity-0 ${
-                    hoveredId === project.id ? 'md:opacity-100' : ''
-                  } hidden md:flex`}>
+
+                  <div className={`absolute inset-0 bg-zinc-900/60 backdrop-blur-[4px] flex items-center justify-center transition-all duration-500 md:opacity-0 ${hoveredId === project.id ? 'md:opacity-100' : ''
+                    } hidden md:flex`}>
                     <div className="px-8 py-4 bg-white text-zinc-900 rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] shadow-2xl translate-y-8 group-hover:translate-y-0 transition-transform duration-500 flex items-center gap-3">
                       Case Study
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -160,7 +195,7 @@ const Projects: React.FC<ProjectsProps> = ({ limit }) => {
               </div>
               <h3 className="text-3xl font-black text-zinc-900 mb-3 tracking-tighter">Architecture under development</h3>
               <p className="text-zinc-400 text-sm max-w-sm mx-auto leading-relaxed">We are currently curating more case studies for the <span className="text-indigo-600 font-bold">{activeCategory}</span> sector.</p>
-              <button 
+              <button
                 onClick={() => setActiveCategory('All')}
                 className="mt-10 px-8 py-4 bg-zinc-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-xl shadow-zinc-900/10"
               >
@@ -172,8 +207,8 @@ const Projects: React.FC<ProjectsProps> = ({ limit }) => {
 
         {limit && (
           <div className="mt-20 text-center animate-fade-up [animation-delay:400ms]">
-            <Link 
-              to="/work" 
+            <Link
+              to="/work"
               className="group w-full sm:w-auto inline-flex items-center justify-center gap-6 px-14 py-6 bg-zinc-900 text-white rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] hover:bg-indigo-600 transition-all active:scale-95 shadow-2xl shadow-zinc-900/10 hover:-translate-y-1"
             >
               Full studio index

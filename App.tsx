@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar.tsx';
-import Hero from './components/Hero.tsx';
-import AboutSection from './components/AboutSection.tsx';
-import Projects from './components/Projects.tsx';
-import Skills from './components/Skills.tsx';
-import Experience from './components/Experience.tsx';
-import Contact from './components/Contact.tsx';
-import AiAssistant from './components/AiAssistant.tsx';
-import BackToTop from './components/BackToTop.tsx';
-import ProjectDetails from './ProjectDetails.tsx';
-import WorkPage from './pages/WorkPage.tsx';
-import AboutPage from './pages/AboutPage.tsx';
-import ContactPage from './pages/ContactPage.tsx';
-import AdminDashboard from './pages/AdminDashboard.tsx';
-import Preloader from './components/Preloader.tsx';
-import WhatsAppButton from './components/WhatsAppButton.tsx';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import AboutSection from './components/AboutSection';
+import Projects from './components/Projects';
+import Skills from './components/Skills';
+import Experience from './components/Experience';
+import Contact from './components/Contact';
+import AiAssistant from './components/AiAssistant';
+import BackToTop from './components/BackToTop';
+import ProjectDetails from './ProjectDetails';
+import WorkPage from './pages/WorkPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminLogin from './pages/AdminLogin';
+import ProtectedRoute from './components/ProtectedRoute';
+import Preloader from './components/Preloader';
+import WhatsAppButton from './components/WhatsAppButton';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -52,18 +54,19 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       {loading && <Preloader onComplete={() => setLoading(false)} />}
-      
+
       <ScrollToTop />
       <div className="relative min-h-screen bg-zinc-50">
         {/* Background Noise/Grain Overlay */}
         <div className="fixed inset-0 pointer-events-none opacity-[0.05] z-[100] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
-        
-        {/* Conditionally render navbar so it doesn't appear on Admin */}
+
+        {/* Conditionally render navbar so it doesn't appear on Admin Pages */}
         <Routes>
           <Route path="/admin" element={null} />
+          <Route path="/admin/login" element={null} />
           <Route path="*" element={<Navbar />} />
         </Routes>
-        
+
         <main className="relative z-10">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -71,12 +74,20 @@ const App: React.FC = () => {
             <Route path="/work" element={<WorkPage />} />
             <Route path="/work/:id" element={<ProjectDetails />} />
             <Route path="/contact" element={<ContactPage />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+
+            {/* Public Admin Route */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+
+            {/* Protected Admin Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/admin" element={<AdminDashboard />} />
+            </Route>
           </Routes>
         </main>
 
         <Routes>
           <Route path="/admin" element={null} />
+          <Route path="/admin/login" element={null} />
           <Route path="*" element={
             <>
               <BackToTop />
@@ -85,7 +96,7 @@ const App: React.FC = () => {
             </>
           } />
         </Routes>
-        
+
         {/* Softer background accents */}
         <div className="fixed inset-0 pointer-events-none z-0">
           <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-200/20 blur-[160px] rounded-full translate-x-1/2 -translate-y-1/2"></div>

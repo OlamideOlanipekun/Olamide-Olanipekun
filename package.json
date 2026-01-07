@@ -1,4 +1,3 @@
-
 {
   "name": "olamide-portfolio",
   "private": true,
@@ -10,18 +9,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google/genai": "^1.34.0",
+    "@supabase/supabase-js": "^2.89.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.1.0",
-    "@google/genai": "^1.34.0"
+    "react-router-dom": "^7.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^6.0.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.16"
+    "tailwindcss": "^3.4.16",
+    "vite": "^6.0.0"
   }
 }

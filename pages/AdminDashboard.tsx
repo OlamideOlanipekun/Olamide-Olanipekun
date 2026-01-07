@@ -1,12 +1,218 @@
-import React, { useState } from 'react';
-import { PROJECTS, SKILLS } from '../constants.ts';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { api } from '../utils/api';
+import { supabase } from '../utils/supabaseClient';
+import { SKILLS } from '../constants';
+
+interface Project {
+  id: string;
+  title: string;
+  category: string;
+  status: string;
+  image_url: string;
+  repo_link?: string;
+  live_link?: string;
+}
 
 const AdminDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'inquiries' | 'skills'>('overview');
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [inquiries, setInquiries] = useState<any[]>([]);
+  const [skills, setSkills] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showAddSkillModal, setShowAddSkillModal] = useState(false);
+
+  // Form State
+  const [newProject, setNewProject] = useState({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '' });
+  const [newSkill, setNewSkill] = useState({ name: '', category: 'Frontend', icon: '⚡', level: 80, description: '', tags: '' });
+  const [uploading, setUploading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const fetchProjects = async () => {
+    try {
+      const data = await api.get('/projects');
+      setProjects(data);
+    } catch (error) {
+      console.error('Failed to fetch projects', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchInquiries = async () => {
+    try {
+      const data = await api.get('/inquiries');
+      setInquiries(data);
+    } catch (error) {
+      console.error('Failed to fetch inquiries', error);
+    }
+  };
+
+  const fetchSkills = async () => {
+    try {
+      const data = await api.get('/skills');
+      setSkills(data);
+    } catch (error) {
+      console.error('Failed to fetch skills', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+    fetchInquiries();
+    fetchSkills();
+  }, []);
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const uploadImage = async (file: File) => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('projects')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const { data } = supabase.storage
+      .from('projects')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  };
+
+  const handleAddProject = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setUploading(true);
+
+    try {
+      let finalImageUrl = newProject.image_url;
+
+      if (imageFile) {
+        finalImageUrl = await uploadImage(imageFile);
+      }
+
+      // Convert comma-separated tags to array
+      const tagsArray = newProject.tags
+        ? newProject.tags.split(',').map(t => t.trim()).filter(t => t)
+        : [];
+
+      await api.post('/projects', {
+        ...newProject,
+        image_url: finalImageUrl,
+        tags: tagsArray
+      });
+
+      // Reset Form
+      setShowAddModal(false);
+      setNewProject({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '' });
+      setImageFile(null);
+      setImagePreview(null);
+
+      fetchProjects(); // Refresh list
+    } catch (error: any) {
+      console.error('Failed to add project', error);
+      alert(`Failed to add project: ${error.message}`);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDeleteProject = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this project?')) return;
+    try {
+      await api.delete(`/projects/${id}`);
+      fetchProjects();
+    } catch (error) {
+      console.error('Failed to delete project', error);
+      alert('Failed to delete project');
+    }
+  };
+
+  const handleDeleteInquiry = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this inquiry?')) return;
+    try {
+      await api.delete(`/inquiries/${id}`);
+      fetchInquiries();
+    } catch (error) {
+      console.error('Failed to delete inquiry', error);
+    }
+  };
+
+  const handleMarkAsRead = async (id: string) => {
+    try {
+      // Assuming patch for marking as read, implemented in route as PATCH /:id/read
+      // But api utility doesn't have patch. I need to add it or use fetch directly.
+      // Or I can update api utility. For now I'll use fetch with auth headers manually or add patch to api utility.
+      // Wait, let's check api utility again. It doesn't have patch. I'll stick to fetch or add patch.
+      // Let's add patch. No wait, I can just use a POST request if I modify the route, or adding PATCH is cleaner.
+      // Since I can't easily modify api.ts without another tool call, I will use fetch here for simplicity.
+
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+
+      await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/inquiries/${id}/read`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      fetchInquiries();
+    } catch (error) {
+      console.error('Failed to mark as read', error);
+    }
+  };
+
+  const handleAddSkill = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const skillsTags = newSkill.tags ? newSkill.tags.split(',').map(t => t.trim()).filter(t => t) : [];
+      await api.post('/skills', { ...newSkill, tags: skillsTags });
+      setShowAddSkillModal(false);
+      setNewSkill({ name: '', category: 'Frontend', icon: '⚡', level: 80, description: '', tags: '' });
+      fetchSkills();
+    } catch (error: any) {
+      console.error('Failed to add skill', error);
+      alert('Failed to add skill');
+    }
+  };
+
+  const handleDeleteSkill = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this skill?')) return;
+    try {
+      await api.delete(`/skills/${id}`);
+      fetchSkills();
+    } catch (error) {
+      console.error('Failed to delete skill', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  };
 
   const stats = [
-    { label: 'Total Projects', value: PROJECTS.length, icon: '🚀', trend: '+12%' },
-    { label: 'Active Inquiries', value: '8', icon: '📩', trend: '+3 today' },
+    { label: 'Total Projects', value: projects.length, icon: '🚀', trend: 'Live' },
+    { label: 'Active Inquiries', value: inquiries.filter(i => !i.read).length, icon: '📩', trend: `${inquiries.length} total` },
     { label: 'Global Reach', value: '1.2k', icon: '🌐', trend: '+18%' },
     { label: 'Stack Health', value: '99.9%', icon: '⚡', trend: 'Stable' },
   ];
@@ -29,17 +235,16 @@ const AdminDashboard: React.FC = () => {
             <div className="text-[8px] font-bold uppercase tracking-widest text-zinc-400">Control Center</div>
           </div>
         </div>
-        
+
         <nav className="flex-1 p-4 space-y-1">
           {sidebarLinks.map((link) => (
             <button
               key={link.id}
               onClick={() => setActiveTab(link.id as any)}
-              className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all ${
-                activeTab === link.id 
-                ? 'bg-zinc-900 text-white shadow-lg shadow-zinc-900/10' 
+              className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all ${activeTab === link.id
+                ? 'bg-zinc-900 text-white shadow-lg shadow-zinc-900/10'
                 : 'text-zinc-400 hover:text-zinc-900 hover:bg-zinc-50'
-              }`}
+                }`}
             >
               <span>{link.icon}</span>
               {link.label}
@@ -47,31 +252,40 @@ const AdminDashboard: React.FC = () => {
           ))}
         </nav>
 
-        <div className="p-6 border-t border-zinc-100">
+        <div className="p-6 border-t border-zinc-100 flex flex-col gap-4">
           <div className="flex items-center gap-3 p-3 bg-zinc-50 rounded-xl border border-zinc-100">
-            <img src="image/founder.png" className="w-8 h-8 rounded-lg object-cover" alt="Admin" />
+            <img src="/assets/founder.png" className="w-8 h-8 rounded-lg object-cover" alt="Admin" />
             <div className="overflow-hidden">
               <div className="text-[9px] font-black text-zinc-900 truncate">Olamide O.</div>
               <div className="text-[7px] font-bold text-emerald-500 uppercase tracking-widest">Master Admin</div>
             </div>
           </div>
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-50 transition-all border border-transparent hover:border-red-100"
+          >
+            <span>🚪</span> Logout
+          </button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 lg:p-12 overflow-y-auto">
+      <main className="flex-1 p-6 lg:p-12 overflow-y-auto relative">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
           <div>
             <h1 className="text-3xl font-black tracking-tighter text-zinc-900 uppercase">
               {activeTab} <span className="text-zinc-300">Hub.</span>
             </h1>
-            <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest mt-1">System operational • Dec 2024</p>
+            <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest mt-1">System operational • {new Date().toLocaleDateString()}</p>
           </div>
           <div className="flex gap-4">
-            <button className="px-6 py-3 bg-white border border-zinc-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-zinc-900 transition-all flex items-center gap-2">
+            <button onClick={fetchProjects} className="px-6 py-3 bg-white border border-zinc-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:border-zinc-900 transition-all flex items-center gap-2">
               <span>🔄</span> Refresh
             </button>
-            <button className="px-6 py-3 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 flex items-center gap-2">
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="px-6 py-3 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 flex items-center gap-2"
+            >
               <span>+</span> New Project
             </button>
           </div>
@@ -95,14 +309,18 @@ const AdminDashboard: React.FC = () => {
               ))}
             </div>
 
-            {/* Content Split */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 bg-white rounded-[2.5rem] border border-zinc-200 overflow-hidden shadow-sm">
-                <div className="p-8 border-b border-zinc-100 flex justify-between items-center">
-                  <h3 className="text-sm font-black uppercase tracking-widest text-zinc-900">Recent Projects</h3>
-                  <button className="text-[9px] font-black text-indigo-600 uppercase tracking-widest hover:underline">View All</button>
-                </div>
-                <div className="overflow-x-auto">
+            {/* Projects Table */}
+            <div className="bg-white rounded-[2.5rem] border border-zinc-200 overflow-hidden shadow-sm">
+              <div className="p-8 border-b border-zinc-100 flex justify-between items-center">
+                <h3 className="text-sm font-black uppercase tracking-widest text-zinc-900">Recent Projects</h3>
+                <button onClick={() => setActiveTab('projects')} className="text-[9px] font-black text-indigo-600 uppercase tracking-widest hover:underline">View All</button>
+              </div>
+              <div className="overflow-x-auto">
+                {loading ? (
+                  <div className="p-12 text-center text-zinc-400 text-sm">Loading projects...</div>
+                ) : projects.length === 0 ? (
+                  <div className="p-12 text-center text-zinc-400 text-sm">No projects found. Create one!</div>
+                ) : (
                   <table className="w-full text-left">
                     <thead>
                       <tr className="bg-zinc-50">
@@ -113,74 +331,371 @@ const AdminDashboard: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-100">
-                      {PROJECTS.slice(0, 5).map((project) => (
+                      {projects.map((project) => (
                         <tr key={project.id} className="hover:bg-zinc-50/50 transition-colors group">
                           <td className="px-8 py-5">
                             <div className="flex items-center gap-4">
-                              <img src={project.imageUrl} className="w-10 h-10 rounded-xl object-cover" alt="" />
+                              {project.image_url && <img src={project.image_url} className="w-10 h-10 rounded-xl object-cover" alt="" />}
                               <div className="text-xs font-bold text-zinc-900">{project.title}</div>
                             </div>
                           </td>
                           <td className="px-8 py-5">
-                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{project.category}</span>
+                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{project.category || 'Web App'}</span>
                           </td>
                           <td className="px-8 py-5">
                             <div className="flex items-center gap-2">
                               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                              <span className="text-[10px] font-bold text-zinc-600">Live</span>
+                              <span className="text-[10px] font-bold text-zinc-600">{project.status || 'Live'}</span>
                             </div>
                           </td>
                           <td className="px-8 py-5">
                             <div className="flex gap-2">
-                              <button className="p-2 hover:bg-zinc-200 rounded-lg transition-colors">⚙️</button>
-                              <button className="p-2 hover:bg-zinc-200 rounded-lg transition-colors text-red-500">🗑️</button>
+                              <button onClick={() => handleDeleteProject(project.id)} className="p-2 hover:bg-zinc-200 rounded-lg transition-colors text-red-500">🗑️</button>
                             </div>
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-[2.5rem] border border-zinc-200 p-8 shadow-sm">
-                <h3 className="text-sm font-black uppercase tracking-widest text-zinc-900 mb-8">System Stack</h3>
-                <div className="space-y-6">
-                  {SKILLS.slice(0, 5).map((skill) => (
-                    <div key={skill.name}>
-                      <div className="flex justify-between items-end mb-2">
-                        <div className="text-[10px] font-black text-zinc-900 uppercase tracking-widest">{skill.name}</div>
-                        <div className="text-[10px] font-black text-indigo-600 mono">{skill.level}%</div>
-                      </div>
-                      <div className="h-1.5 w-full bg-zinc-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-zinc-900 rounded-full" 
-                          style={{ width: `${skill.level}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-10 pt-8 border-t border-zinc-100 text-center">
-                  <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-[0.2em] mb-4">Architecture optimized for Gemini 2.5</p>
-                  <button className="w-full py-4 border border-zinc-200 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-zinc-50 transition-colors">Audit Stack</button>
-                </div>
+                )}
               </div>
             </div>
           </div>
         )}
 
-        {activeTab !== 'overview' && (
-          <div className="flex flex-col items-center justify-center py-32 bg-white border border-dashed border-zinc-200 rounded-[3rem] animate-fade-up">
-            <div className="text-4xl mb-6">🛠️</div>
-            <h3 className="text-xl font-black text-zinc-900 uppercase tracking-widest">Section Under Construction</h3>
-            <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest mt-2">Module activation scheduled for Q1 2025</p>
-            <button 
-              onClick={() => setActiveTab('overview')}
-              className="mt-8 text-indigo-600 text-[10px] font-black uppercase tracking-[0.3em] hover:underline"
-            >
-              Back to Overview
-            </button>
+        {/* Add Project Modal */}
+        {showAddModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl animate-fade-up max-h-[90vh] overflow-y-auto">
+              <h2 className="text-xl font-black text-zinc-900 uppercase tracking-widest mb-6">Add New Project</h2>
+              <form onSubmit={handleAddProject} className="space-y-4">
+                <input
+                  type="text" required placeholder="Project Title"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
+                  value={newProject.title} onChange={e => setNewProject({ ...newProject, title: e.target.value })}
+                />
+                <input
+                  type="text" placeholder="Category (e.g. Web App)"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
+                  value={newProject.category} onChange={e => setNewProject({ ...newProject, category: e.target.value })}
+                />
+                <textarea
+                  placeholder="Project Description - Describe what this project does..."
+                  rows={3}
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all resize-none"
+                  value={newProject.description} onChange={e => setNewProject({ ...newProject, description: e.target.value })}
+                />
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Tech Stack</label>
+                  <input
+                    type="text" placeholder="React, Node.js, Supabase..."
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
+                    value={newProject.tags} onChange={e => setNewProject({ ...newProject, tags: e.target.value })}
+                  />
+                  <p className="text-[9px] text-zinc-400 ml-1">Separate technologies with commas</p>
+                </div>
+
+                {/* Image Upload Section */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Project Image</label>
+
+                  {/* File Drop Area */}
+                  <div className="border-2 border-dashed border-zinc-200 rounded-xl p-4 text-center hover:bg-zinc-50 transition-colors relative cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    {imagePreview ? (
+                      <div className="relative">
+                        <img src={imagePreview} alt="Preview" className="w-full h-32 object-cover rounded-lg" />
+                        <div className="absolute inset-0 bg-black/20 flex items-center justify-center text-white text-xs font-bold rounded-lg opacity-0 hover:opacity-100 transition-opacity">Change Image</div>
+                      </div>
+                    ) : (
+                      <div className="py-4">
+                        <span className="text-2xl block mb-2">🖼️</span>
+                        <span className="text-xs font-bold text-zinc-400 uppercase tracking-wide">Click to Upload Image</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <div className="h-px bg-zinc-100 flex-1"></div>
+                    <span className="text-[9px] font-black text-zinc-300 uppercase">OR</span>
+                    <div className="h-px bg-zinc-100 flex-1"></div>
+                  </div>
+
+                  <input
+                    type="text" placeholder="Paste Image URL directly"
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
+                    value={newProject.image_url} onChange={e => setNewProject({ ...newProject, image_url: e.target.value })}
+                  />
+                </div>
+
+                <div className="flex gap-3 mt-8">
+                  <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 py-3 text-xs font-bold uppercase border border-zinc-200 rounded-xl hover:bg-zinc-50 transition-colors">Cancel</button>
+                  <button
+                    type="submit"
+                    disabled={uploading}
+                    className="flex-1 py-3 bg-zinc-900 text-white text-xs font-bold uppercase rounded-xl hover:bg-black transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {uploading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Uploading...
+                      </>
+                    ) : (
+                      'Add Project'
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Projects Tab - Full List */}
+        {activeTab === 'projects' && (
+          <div className="space-y-8 animate-fade-up">
+            <div className="bg-white rounded-[2.5rem] border border-zinc-200 overflow-hidden shadow-sm">
+              <div className="p-8 border-b border-zinc-100 flex justify-between items-center">
+                <h3 className="text-sm font-black uppercase tracking-widest text-zinc-900">All Projects</h3>
+                <span className="text-[9px] font-black text-zinc-400 uppercase tracking-widest">{projects.length} Total</span>
+              </div>
+              <div className="overflow-x-auto">
+                {loading ? (
+                  <div className="p-12 text-center text-zinc-400 text-sm">Loading projects...</div>
+                ) : projects.length === 0 ? (
+                  <div className="p-12 text-center text-zinc-400 text-sm">No projects found. Create one!</div>
+                ) : (
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-zinc-50">
+                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Project</th>
+                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Category</th>
+                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Status</th>
+                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Tech Stack</th>
+                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-100">
+                      {projects.map((project) => (
+                        <tr key={project.id} className="hover:bg-zinc-50/50 transition-colors">
+                          <td className="px-8 py-5">
+                            <div className="flex items-center gap-4">
+                              {project.image_url && <img src={project.image_url} className="w-12 h-12 rounded-xl object-cover" alt="" />}
+                              <div>
+                                <div className="text-sm font-bold text-zinc-900">{project.title}</div>
+                                <div className="text-[10px] text-zinc-400 mt-0.5 truncate max-w-[200px]">{project.live_link || 'No link'}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-8 py-5">
+                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{project.category || 'Web App'}</span>
+                          </td>
+                          <td className="px-8 py-5">
+                            <div className="flex items-center gap-2">
+                              <div className={`w-2 h-2 rounded-full ${project.status === 'Live' ? 'bg-emerald-500' : 'bg-amber-500'}`}></div>
+                              <span className="text-[10px] font-bold text-zinc-600">{project.status || 'Live'}</span>
+                            </div>
+                          </td>
+                          <td className="px-8 py-5">
+                            <div className="flex flex-wrap gap-1 max-w-[200px]">
+                              {(project.tags || []).slice(0, 3).map((tag: string, i: number) => (
+                                <span key={i} className="text-[8px] font-bold px-2 py-1 bg-zinc-100 rounded-md text-zinc-500">{tag}</span>
+                              ))}
+                            </div>
+                          </td>
+                          <td className="px-8 py-5">
+                            <div className="flex gap-2">
+                              <button onClick={() => handleDeleteProject(project.id)} className="p-2 hover:bg-red-50 rounded-lg transition-colors text-red-500 text-sm">🗑️</button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Inquiries Tab */}
+        {activeTab === 'inquiries' && (
+          <div className="space-y-8 animate-fade-up">
+            <div className="bg-white rounded-[2.5rem] border border-zinc-200 overflow-hidden shadow-sm">
+              <div className="p-8 border-b border-zinc-100 flex justify-between items-center">
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-zinc-900">Client Inquiries</h3>
+                  <p className="text-[10px] text-zinc-400 mt-1">Messages from contact form submissions</p>
+                </div>
+                <button onClick={fetchInquiries} className="px-4 py-2 bg-zinc-50 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-zinc-100 transition-colors">
+                  Refresh List
+                </button>
+              </div>
+              <div className="overflow-x-auto">
+                {inquiries.length === 0 ? (
+                  <div className="p-12 text-center text-zinc-400 text-sm">No inquiries yet.</div>
+                ) : (
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-zinc-50">
+                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Client</th>
+                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Message</th>
+                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Date</th>
+                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-100">
+                      {inquiries.map((inquiry) => (
+                        <tr key={inquiry.id} className={`hover:bg-zinc-50/50 transition-colors ${!inquiry.read ? 'bg-indigo-50/10' : ''}`}>
+                          <td className="px-8 py-5">
+                            <div>
+                              <div className="text-xs font-bold text-zinc-900">{inquiry.name}</div>
+                              <div className="text-[10px] text-zinc-400 mt-0.5">{inquiry.email}</div>
+                              {!inquiry.read && <span className="inline-block mt-1 px-1.5 py-0.5 bg-indigo-100 text-indigo-600 rounded text-[8px] font-black uppercase tracking-widest">New</span>}
+                            </div>
+                          </td>
+                          <td className="px-8 py-5">
+                            <div className="max-w-xs">
+                              <p className="text-xs font-bold text-zinc-700 truncate">{inquiry.subject || 'No Subject'}</p>
+                              <p className="text-[10px] text-zinc-500 line-clamp-2 mt-1">{inquiry.message}</p>
+                            </div>
+                          </td>
+                          <td className="px-8 py-5">
+                            <span className="text-[10px] font-bold text-zinc-400">
+                              {new Date(inquiry.created_at).toLocaleDateString()}
+                            </span>
+                          </td>
+                          <td className="px-8 py-5">
+                            <div className="flex gap-2">
+                              {!inquiry.read && (
+                                <button onClick={() => handleMarkAsRead(inquiry.id)} className="p-2 hover:bg-indigo-50 rounded-lg transition-colors text-indigo-500 text-[10px] font-bold uppercase tracking-wide" title="Mark as Read">
+                                  Mark Read
+                                </button>
+                              )}
+                              <a href={`mailto:${inquiry.email}`} className="p-2 hover:bg-zinc-100 rounded-lg transition-colors text-zinc-600" title="Reply">↩️</a>
+                              <button onClick={() => handleDeleteInquiry(inquiry.id)} className="p-2 hover:bg-red-50 rounded-lg transition-colors text-red-500" title="Delete">🗑️</button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Skills/Capabilities Tab */}
+        {activeTab === 'skills' && (
+          <div className="space-y-8 animate-fade-up">
+            <div className="bg-white rounded-[2.5rem] border border-zinc-200 overflow-hidden shadow-sm">
+              <div className="p-8 border-b border-zinc-100 flex justify-between items-center">
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-zinc-900">Capabilities</h3>
+                  <p className="text-[10px] text-zinc-400 mt-1">Skills and technologies you offer</p>
+                </div>
+                <button
+                  onClick={() => setShowAddSkillModal(true)}
+                  className="px-6 py-3 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 flex items-center gap-2"
+                >
+                  <span>+</span> New Skill
+                </button>
+              </div>
+              <div className="p-8">
+                {skills.length === 0 ? (
+                  <div className="text-center py-12">
+                    <p className="text-zinc-400 text-sm mb-4">No skills found.</p>
+                    <button onClick={() => setShowAddSkillModal(true)} className="text-indigo-600 text-xs font-bold uppercase hover:underline">Add your first skill</button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {skills.map((skill: any) => (
+                      <div key={skill.id} className="p-6 bg-zinc-50 rounded-2xl border border-zinc-100 hover:border-indigo-200 transition-all group relative">
+                        <button
+                          onClick={() => handleDeleteSkill(skill.id)}
+                          className="absolute top-4 right-4 text-zinc-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 p-2"
+                        >
+                          🗑️
+                        </button>
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-xl shadow-sm group-hover:bg-indigo-50 transition-all">
+                            {skill.icon || '⚡'}
+                          </div>
+                          <span className="text-[8px] font-black text-emerald-500 bg-emerald-50 px-2 py-1 rounded-lg uppercase">{skill.category}</span>
+                        </div>
+                        <h4 className="text-sm font-black text-zinc-900 mb-1">{skill.name}</h4>
+                        <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-3 mb-2 overflow-hidden">
+                          <div className="bg-indigo-600 h-1.5 rounded-full" style={{ width: `${skill.level}%` }}></div>
+                        </div>
+                        <p className="text-[10px] text-zinc-400 leading-relaxed truncate">{skill.description || 'No description'}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Add Skill Modal */}
+        {showAddSkillModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl animate-fade-up">
+              <h2 className="text-xl font-black text-zinc-900 uppercase tracking-widest mb-6">Add Skill</h2>
+              <form onSubmit={handleAddSkill} className="space-y-4">
+                <input
+                  type="text" required placeholder="Skill Name (e.g. React)"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
+                  value={newSkill.name} onChange={e => setNewSkill({ ...newSkill, name: e.target.value })}
+                />
+                <select
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all text-zinc-600"
+                  value={newSkill.category} onChange={e => setNewSkill({ ...newSkill, category: e.target.value })}
+                >
+                  <option value="Frontend">Frontend</option>
+                  <option value="Backend">Backend</option>
+                  <option value="Tools">Tools</option>
+                  <option value="Design">Design</option>
+                </select>
+                <div className="grid grid-cols-2 gap-4">
+                  <input
+                    type="text" placeholder="Icon (e.g. ⚛️)"
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
+                    value={newSkill.icon} onChange={e => setNewSkill({ ...newSkill, icon: e.target.value })}
+                  />
+                  <input
+                    type="number" min="1" max="100" placeholder="Level %"
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
+                    value={newSkill.level} onChange={e => setNewSkill({ ...newSkill, level: Number(e.target.value) })}
+                  />
+                </div>
+                <textarea
+                  placeholder="Short description..."
+                  rows={2}
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all resize-none"
+                  value={newSkill.description} onChange={e => setNewSkill({ ...newSkill, description: e.target.value })}
+                />
+
+                <div className="space-y-1">
+                  <input
+                    type="text" placeholder="Tags (comma separated)..."
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
+                    value={newSkill.tags} onChange={e => setNewSkill({ ...newSkill, tags: e.target.value })}
+                  />
+                  <p className="text-[9px] text-zinc-400 ml-1">Example: Vite, Hooks, Context</p>
+                </div>
+
+                <div className="flex gap-3 mt-6">
+                  <button type="button" onClick={() => setShowAddSkillModal(false)} className="flex-1 py-3 text-xs font-bold uppercase border border-zinc-200 rounded-xl hover:bg-zinc-50 transition-colors">Cancel</button>
+                  <button type="submit" className="flex-1 py-3 bg-indigo-600 text-white text-xs font-bold uppercase rounded-xl hover:bg-indigo-700 transition-colors">Add</button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
       </main>
