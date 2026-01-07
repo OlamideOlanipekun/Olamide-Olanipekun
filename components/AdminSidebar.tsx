@@ -19,7 +19,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActiveTab, ha
     return (
         <>
             {/* Mobile Menu Button */}
-            <div className="lg:hidden fixed top-6 left-6 z-[60]">
+            <div className="lg:hidden fixed top-6 right-6 z-[60]">
                 <button
                     onClick={() => setIsOpen(!isOpen)}
                     className="w-12 h-12 bg-zinc-900 text-white rounded-xl shadow-xl flex items-center justify-center hover:scale-105 transition-all"
@@ -66,8 +66,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActiveTab, ha
                                 setIsOpen(false);
                             }}
                             className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.15em] transition-all group ${activeTab === link.id
-                                    ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/10 scale-[1.02]'
-                                    : 'text-zinc-400 hover:text-zinc-900 hover:bg-zinc-50'
+                                ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/10 scale-[1.02]'
+                                : 'text-zinc-400 hover:text-zinc-900 hover:bg-zinc-50'
                                 }`}
                         >
                             <span className={`text-lg transition-transform group-hover:scale-125 ${activeTab === link.id ? 'scale-110' : ''}`}>
