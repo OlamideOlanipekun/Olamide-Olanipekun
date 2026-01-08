@@ -49,6 +49,25 @@ app.use('/api/skills', require('./routes/skills'));
 app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/newsletter', require('./routes/newsletter'));
 
+// Test SMTP Route (Debug)
+const { transporter } = require('./services/emailService');
+app.get('/api/test-smtp', async (req, res) => {
+    try {
+        await transporter.verify();
+        res.json({
+            message: 'SMTP Connection Successful ✅',
+            user: process.env.SMTP_USER || 'UNDEFINED',
+            host: process.env.SMTP_HOST
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: 'SMTP Connection Failed ❌',
+            details: error.message,
+            tip: 'Check Render Environment Variables'
+        });
+    }
+});
+
 // Base Route
 app.get('/', (req, res) => {
     res.send('Admin Dashboard API is running securely');

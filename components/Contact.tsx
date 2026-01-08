@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { SOCIAL_LINKS } from '../constants';
 import { api } from '../utils/api';
 
@@ -15,22 +14,40 @@ const Contact: React.FC = () => {
     setErrorMessage('');
 
     try {
-      // Submit inquiry to backend (which handles DB save and Email)
-      await api.post('/inquiries', {
-        name: formState.name,
-        email: formState.email,
-        message: formState.message,
-        subject: `New Inquiry from ${formState.name} | Midtech Portfolio`
+      // 1. Submit email via Web3Forms (Client-side)
+      const formData = new FormData();
+      formData.append('access_key', import.meta.env.VITE_WEB3FORMS_ACCESS_KEY);
+      formData.append('name', formState.name);
+      formData.append('email', formState.email);
+      formData.append('message', formState.message);
+      formData.append('subject', `New Inquiry from ${formState.name} | Midtech Portfolio`);
+
+      const web3Response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
       });
+      const web3Result = await web3Response.json();
+      if (!web3Result.success) throw new Error(web3Result.message);
+
+      // 2. Save data to Backend DB (Ignore errors here so user still gets success message)
+      try {
+        await api.post('/inquiries', {
+          name: formState.name,
+          email: formState.email,
+          message: formState.message,
+          subject: `New Inquiry from ${formState.name} | Midtech Portfolio`
+        });
+      } catch (dbError) {
+        console.error("Backend DB save failed (non-critical):", dbError);
+      }
 
       setIsSuccess(true);
       setFormState({ name: '', email: '', message: '' });
-      // Hide success message after 5 seconds
       setTimeout(() => setIsSuccess(false), 5000);
 
     } catch (error: any) {
-      setErrorMessage(error.message || "Could not connect to the server. Check your internet connection.");
-      console.error("Form submission error:", error);
+      setErrorMessage(error.message || 'Something went wrong. Please try again.');
+      console.error('Form submission error:', error);
     } finally {
       setIsSubmitting(false);
     }
