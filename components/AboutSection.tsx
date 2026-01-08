@@ -1,8 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import founderImage from '../assets/founder.jpg';
+import { supabase } from '../utils/supabaseClient';
+
+const FALLBACK_FOUNDER_IMAGE = '/assets/founder.jpg';
 
 const AboutSection: React.FC = () => {
+  const [founderImage, setFounderImage] = useState<string>(FALLBACK_FOUNDER_IMAGE);
+
+  useEffect(() => {
+    const fetchFounderImage = async () => {
+      try {
+        const { data: files } = await supabase.storage.from('assets').list('', { search: 'founder' });
+        if (files && files.length > 0) {
+          const founderFile = files.find(f => f.name.startsWith('founder.'));
+          if (founderFile) {
+            const { data } = supabase.storage.from('assets').getPublicUrl(founderFile.name);
+            if (data?.publicUrl) {
+              setFounderImage(data.publicUrl + '?t=' + Date.now());
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch founder image', error);
+      }
+    };
+    fetchFounderImage();
+  }, []);
+
   return (
     <section className="py-24 sm:py-32 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
