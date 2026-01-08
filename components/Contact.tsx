@@ -15,31 +15,13 @@ const Contact: React.FC = () => {
     setErrorMessage('');
 
     try {
-      // Execute both Database Save and Web3Forms Email in parallel
-      const dbRequest = api.post('/inquiries', {
+      // Submit inquiry to backend (which handles DB save and Email)
+      await api.post('/inquiries', {
         name: formState.name,
         email: formState.email,
         message: formState.message,
         subject: `New Inquiry from ${formState.name} | Midtech Portfolio`
       });
-
-      const web3FormsRequest = fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          access_key: "a2150797-f858-47da-97f3-d073a14b39e0",
-          name: formState.name,
-          email: formState.email,
-          message: formState.message,
-          subject: `New Inquiry from ${formState.name} | Midtech Portfolio`,
-          from_name: "Midtech Solutions Portfolio"
-        }),
-      });
-
-      await Promise.all([dbRequest, web3FormsRequest]);
 
       setIsSuccess(true);
       setFormState({ name: '', email: '', message: '' });
