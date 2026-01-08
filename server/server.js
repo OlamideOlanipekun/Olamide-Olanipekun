@@ -13,6 +13,7 @@ app.use(express.json());
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/inquiries', require('./routes/inquiries'));
 app.use('/api/skills', require('./routes/skills'));
+app.use('/api/reviews', require('./routes/reviews'));
 
 // Base Route
 app.get('/', (req, res) => {

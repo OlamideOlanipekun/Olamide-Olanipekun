@@ -18,7 +18,7 @@ interface Project {
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'inquiries' | 'skills' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'inquiries' | 'skills' | 'settings' | 'reviews'>('overview');
   const [projects, setProjects] = useState<Project[]>([]);
   const [inquiries, setInquiries] = useState<any[]>([]);
   const [skills, setSkills] = useState<any[]>([]);
@@ -69,13 +69,26 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  // Reviews state
+  const [reviews, setReviews] = useState<any[]>([]);
+
+  const fetchReviews = async () => {
+    try {
+      const data = await api.get('/reviews/all');
+      setReviews(data);
+    } catch (error) {
+      console.error('Failed to fetch reviews', error);
+    }
+  };
+
   const refreshAllData = async () => {
     setIsRefreshing(true);
     try {
       await Promise.all([
         fetchProjects(),
         fetchInquiries(),
-        fetchSkills()
+        fetchSkills(),
+        fetchReviews()
       ]);
     } catch (error) {
       console.error('Refresh failed', error);
@@ -88,6 +101,7 @@ const AdminDashboard: React.FC = () => {
     fetchProjects();
     fetchInquiries();
     fetchSkills();
+    fetchReviews();
   }, []);
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -246,8 +260,37 @@ const AdminDashboard: React.FC = () => {
     { id: 'projects', label: 'Projects', icon: '💼' },
     { id: 'inquiries', label: 'Inquiries', icon: '✉️' },
     { id: 'skills', label: 'Capabilities', icon: '🛠️' },
+    { id: 'reviews', label: 'Reviews', icon: '⭐' },
     { id: 'settings', label: 'Settings', icon: '⚙️' },
   ];
+
+  const handleApproveReview = async (id: number, approved: boolean) => {
+    try {
+      await api.patch(`/reviews/${id}`, { approved });
+      fetchReviews();
+    } catch (error) {
+      console.error('Failed to update review', error);
+    }
+  };
+
+  const handleFeatureReview = async (id: number, featured: boolean) => {
+    try {
+      await api.patch(`/reviews/${id}`, { featured });
+      fetchReviews();
+    } catch (error) {
+      console.error('Failed to feature review', error);
+    }
+  };
+
+  const handleDeleteReview = async (id: number) => {
+    if (!window.confirm('Delete this review?')) return;
+    try {
+      await api.delete(`/reviews/${id}`);
+      fetchReviews();
+    } catch (error) {
+      console.error('Failed to delete review', error);
+    }
+  };
 
   const handleFounderImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -753,6 +796,83 @@ const AdminDashboard: React.FC = () => {
                   <button type="submit" className="flex-1 py-3 bg-indigo-600 text-white text-xs font-bold uppercase rounded-xl hover:bg-indigo-700 transition-colors">Add</button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Reviews Tab */}
+        {activeTab === 'reviews' && (
+          <div className="space-y-8 animate-fade-up">
+            <div className="bg-white rounded-[2.5rem] border border-zinc-200 overflow-hidden shadow-sm">
+              <div className="p-8 border-b border-zinc-100 flex justify-between items-center">
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-widest text-zinc-900">Client Reviews</h3>
+                  <p className="text-[10px] text-zinc-400 mt-1">Moderate and feature reviews</p>
+                </div>
+                <div className="flex gap-4 text-[9px] font-black uppercase tracking-widest">
+                  <span className="text-emerald-600">{reviews.filter(r => r.approved).length} Approved</span>
+                  <span className="text-amber-600">{reviews.filter(r => !r.approved).length} Pending</span>
+                </div>
+              </div>
+
+              <div className="divide-y divide-zinc-100">
+                {reviews.length === 0 ? (
+                  <div className="p-12 text-center text-zinc-400 text-sm">No reviews yet</div>
+                ) : (
+                  reviews.map((review) => (
+                    <div key={review.id} className={`p-6 flex gap-6 items-start ${!review.approved ? 'bg-amber-50/50' : ''}`}>
+                      <div className="w-12 h-12 rounded-xl bg-zinc-900 flex items-center justify-center text-white font-black text-lg shrink-0">
+                        {review.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="font-black text-zinc-900 text-sm">{review.name}</span>
+                          {review.company && <span className="text-[9px] text-zinc-400 font-bold uppercase">{review.company}</span>}
+                          <div className="flex gap-0.5 text-amber-400 text-xs">
+                            {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
+                          </div>
+                        </div>
+                        <p className="text-zinc-600 text-sm leading-relaxed mb-3 line-clamp-2">"{review.message}"</p>
+                        <div className="flex gap-2 flex-wrap">
+                          {!review.approved ? (
+                            <button
+                              onClick={() => handleApproveReview(review.id, true)}
+                              className="px-3 py-1.5 bg-emerald-100 text-emerald-700 text-[9px] font-black uppercase rounded-lg hover:bg-emerald-200 transition-colors"
+                            >
+                              ✓ Approve
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleApproveReview(review.id, false)}
+                              className="px-3 py-1.5 bg-zinc-100 text-zinc-600 text-[9px] font-black uppercase rounded-lg hover:bg-zinc-200 transition-colors"
+                            >
+                              Unapprove
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleFeatureReview(review.id, !review.featured)}
+                            className={`px-3 py-1.5 text-[9px] font-black uppercase rounded-lg transition-colors ${review.featured
+                                ? 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'
+                                : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200'
+                              }`}
+                          >
+                            {review.featured ? '★ Featured' : '☆ Feature'}
+                          </button>
+                          <button
+                            onClick={() => handleDeleteReview(review.id)}
+                            className="px-3 py-1.5 bg-red-50 text-red-600 text-[9px] font-black uppercase rounded-lg hover:bg-red-100 transition-colors"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                      <div className="text-[9px] text-zinc-400 font-mono shrink-0">
+                        {new Date(review.created_at).toLocaleDateString()}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         )}

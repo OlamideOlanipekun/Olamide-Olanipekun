@@ -7,6 +7,7 @@ import Projects from './components/Projects';
 import Skills from './components/Skills';
 import Experience from './components/Experience';
 import Contact from './components/Contact';
+import Reviews from './components/Reviews';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
 import ProjectDetails from './ProjectDetails';
@@ -34,6 +35,7 @@ const Home = () => (
     <AboutSection />
     <Projects limit={3} />
     <Skills />
+    <Reviews />
     <Experience />
     <Contact />
   </>
