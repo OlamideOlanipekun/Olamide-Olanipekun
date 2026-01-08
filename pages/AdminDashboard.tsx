@@ -822,6 +822,8 @@ const AdminDashboard: React.FC = () => {
                 >
                   <option value="Frontend">Frontend</option>
                   <option value="Backend">Backend</option>
+                  <option value="AI & Automation">AI & Automation</option>
+                  <option value="Engineering">Engineering</option>
                   <option value="Tools">Tools</option>
                   <option value="Design">Design</option>
                 </select>

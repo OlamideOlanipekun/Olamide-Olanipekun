@@ -56,11 +56,11 @@ const AboutSection: React.FC = () => {
           </div>
 
           <div className="lg:col-span-7 space-y-10 animate-fade-up [animation-delay:200ms]">
-            <p className="text-xl sm:text-2xl text-zinc-500 leading-relaxed font-medium">
-              Midtech Solutions represents the intersection of technical rigor and creative intuition. Founded by Olamide Olanipekun, we don't just ship products; we architect scalable ecosystems.
+            <p className="text-lg md:text-xl text-zinc-600 leading-relaxed max-w-2xl mb-8">
+              I am a results-driven Website Developer and emerging AI professional with strong experience building responsive, scalable, and user-centric web applications. I specialize in translating business requirements into clean, maintainable code that delivers measurable value.
             </p>
-            <p className="text-zinc-500 leading-relaxed max-w-xl">
-              In an era of generic templates, we prioritize custom-engineered solutions. From high-stakes financial dashboards to AI-augmented interfaces, every pixel and logic gate is optimized for performance, security, and growth.
+            <p className="text-base text-zinc-500 leading-relaxed max-w-2xl mb-8">
+              My expertise spans front-end and back-end development using modern technologies such as <strong className="text-zinc-900">HTML, CSS, JavaScript, React, PHP, and Node.js</strong>, alongside database-driven systems with MySQL. Integrated with a strong focus on <strong className="text-zinc-900">AI adoption</strong>, I design intelligent features and automate workflows to enhance user experience and business efficiency.
             </p>
             <div className="pt-6">
               <Link
