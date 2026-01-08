@@ -21,14 +21,14 @@ router.post('/', async (req, res) => {
     console.log('=== POST /projects called ===');
     console.log('Request body:', req.body);
 
-    const { title, description, image_url, live_link, repo_link, tags, category, status } = req.body;
+    const { title, description, image_url, live_link, repo_link, tags, category, status, year } = req.body;
 
     console.log('Attempting insert with supabase client...');
 
     const { data, error } = await supabase
         .from('projects')
         .insert([
-            { title, description, image_url, live_link, repo_link, tags, category, status }
+            { title, description, image_url, live_link, repo_link, tags, category, status, year }
         ])
         .select();
 
