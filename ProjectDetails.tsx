@@ -14,6 +14,7 @@ interface Project {
   year?: string;
   live_link?: string;
   repo_link?: string;
+  images?: string[];
 }
 
 const ProjectDetails: React.FC = () => {
@@ -125,10 +126,23 @@ const ProjectDetails: React.FC = () => {
             </div>
           </div>
 
-          <div className="animate-fade-up [animation-delay:200ms]">
-            <div className="rounded-[3rem] overflow-hidden border border-zinc-100 shadow-2xl shadow-zinc-200/50">
-              <img src={project.image_url} alt={project.title} className="w-full h-auto object-cover" />
+          <div className="space-y-8">
+            <div className="animate-fade-up [animation-delay:200ms]">
+              <div className="rounded-[3rem] overflow-hidden border border-zinc-100 shadow-2xl shadow-zinc-200/50">
+                <img src={project.image_url} alt={project.title} className="w-full h-auto object-cover" />
+              </div>
             </div>
+
+            {/* Gallery Section */}
+            {project.images && project.images.length > 0 && (
+              <div className="grid grid-cols-2 gap-4 animate-fade-up [animation-delay:400ms]">
+                {project.images.map((img, idx) => (
+                  <div key={idx} className="rounded-[2rem] overflow-hidden border border-zinc-100 shadow-lg">
+                    <img src={img} alt={`${project.title} gallery ${idx}`} className="w-full h-40 sm:h-56 object-cover hover:scale-105 transition-transform duration-500" />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

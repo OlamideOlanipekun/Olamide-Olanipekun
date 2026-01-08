@@ -27,12 +27,27 @@ const AdminDashboard: React.FC = () => {
   const [showAddSkillModal, setShowAddSkillModal] = useState(false);
 
   // Form State
-  const [newProject, setNewProject] = useState({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '', year: new Date().getFullYear().toString() });
+  const [newProject, setNewProject] = useState({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '', year: new Date().getFullYear().toString(), images: [] as string[] });
   const [newSkill, setNewSkill] = useState({ name: '', category: 'Frontend', icon: '⚡', level: 80, description: '', tags: '' });
   const [uploading, setUploading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  // Gallery State
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+  const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
+
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleGallerySelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      setGalleryFiles(files);
+
+      // Create previews
+      const newPreviews = files.map(file => URL.createObjectURL(file));
+      setGalleryPreviews(newPreviews);
+    }
+  };
 
   // Founder Image State
   const [founderImageUrl, setFounderImageUrl] = useState<string>('/assets/founder.jpg');
@@ -159,9 +174,19 @@ const AdminDashboard: React.FC = () => {
 
     try {
       let finalImageUrl = newProject.image_url;
+      const galleryUrls: string[] = [];
 
+      // 1. Upload Main Cover Image
       if (imageFile) {
         finalImageUrl = await uploadImage(imageFile);
+      }
+
+      // 2. Upload Gallery Images
+      if (galleryFiles.length > 0) {
+        for (const file of galleryFiles) {
+          const url = await uploadImage(file);
+          galleryUrls.push(url);
+        }
       }
 
       // Convert comma-separated tags to array
@@ -172,14 +197,17 @@ const AdminDashboard: React.FC = () => {
       await api.post('/projects', {
         ...newProject,
         image_url: finalImageUrl,
+        images: galleryUrls, // Send array of extra images
         tags: tagsArray
       });
 
       // Reset Form
       setShowAddModal(false);
-      setNewProject({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '', year: new Date().getFullYear().toString() });
+      setNewProject({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '', year: new Date().getFullYear().toString(), images: [] });
       setImageFile(null);
       setImagePreview(null);
+      setGalleryFiles([]);
+      setGalleryPreviews([]);
 
       fetchProjects(); // Refresh list
     } catch (error: any) {
@@ -518,39 +546,51 @@ const AdminDashboard: React.FC = () => {
                   </select>
                 </div>
 
-                {/* Image Upload Section */}
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Project Image</label>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Main Cover Image</label>
+                    <div className="border-2 border-dashed border-zinc-200 rounded-xl p-4 text-center hover:bg-zinc-50 transition-colors relative cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageSelect}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      />
+                      {imagePreview ? (
+                        <div className="relative">
+                          <img src={imagePreview} alt="Preview" className="w-full h-32 object-cover rounded-lg" />
+                          <div className="absolute inset-0 bg-black/20 flex items-center justify-center text-white text-xs font-bold rounded-lg opacity-0 hover:opacity-100 transition-opacity">Change Image</div>
+                        </div>
+                      ) : (
+                        <div className="py-4">
+                          <span className="text-2xl block mb-2">🖼️</span>
+                          <span className="text-xs font-bold text-zinc-400 uppercase tracking-wide">Main Cover Image</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
-                  {/* File Drop Area */}
-                  <div className="border-2 border-dashed border-zinc-200 rounded-xl p-4 text-center hover:bg-zinc-50 transition-colors relative cursor-pointer">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Gallery Images (Optional)</label>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-2">
+                      {galleryPreviews.map((src, i) => (
+                        <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-zinc-200">
+                          <img src={src} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={handleImageSelect}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      multiple
+                      onChange={handleGallerySelect}
+                      className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                     />
-                    {imagePreview ? (
-                      <div className="relative">
-                        <img src={imagePreview} alt="Preview" className="w-full h-32 object-cover rounded-lg" />
-                        <div className="absolute inset-0 bg-black/20 flex items-center justify-center text-white text-xs font-bold rounded-lg opacity-0 hover:opacity-100 transition-opacity">Change Image</div>
-                      </div>
-                    ) : (
-                      <div className="py-4">
-                        <span className="text-2xl block mb-2">🖼️</span>
-                        <span className="text-xs font-bold text-zinc-400 uppercase tracking-wide">Click to Upload Image</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <div className="h-px bg-zinc-100 flex-1"></div>
-                    <span className="text-[9px] font-black text-zinc-300 uppercase">OR</span>
-                    <div className="h-px bg-zinc-100 flex-1"></div>
+                    <p className="text-[9px] text-zinc-400 ml-1">Select multiple files to create a project gallery.</p>
                   </div>
 
                   <input
-                    type="text" placeholder="Paste Image URL directly"
+                    type="text" placeholder="Or paste Image URL directly"
                     className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
                     value={newProject.image_url} onChange={e => setNewProject({ ...newProject, image_url: e.target.value })}
                   />
