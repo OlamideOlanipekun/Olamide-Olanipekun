@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '../utils/supabaseClient';
 
 // Fallback to local asset if Supabase URL not available
@@ -129,16 +130,19 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="max-w-7xl mx-auto px-6 mb-20">
-        <div className="p-16 md:p-24 bg-zinc-900 rounded-[4rem] text-center relative overflow-hidden group">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-20">
+        <div className="p-10 sm:p-16 md:p-24 bg-zinc-900 rounded-[2.5rem] sm:rounded-[4rem] text-center relative overflow-hidden group">
           <div className="absolute inset-0 bg-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-          <h2 className="text-4xl md:text-6xl font-black text-white mb-10 tracking-tighter">Ready to architect?</h2>
-          <a
-            href="/contact"
-            className="inline-flex items-center gap-6 px-14 py-6 bg-white text-zinc-900 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] hover:bg-indigo-600 hover:text-white transition-all shadow-2xl"
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-8 sm:mb-10 tracking-tighter leading-tight">Ready to architect?</h2>
+          <Link
+            to="/contact"
+            className="inline-flex items-center justify-center gap-4 sm:gap-6 px-8 sm:px-14 py-5 sm:py-6 bg-white text-zinc-900 rounded-xl sm:rounded-2xl font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[10px] sm:text-[11px] hover:bg-indigo-600 hover:text-white transition-all shadow-2xl active:scale-95 w-full sm:w-auto"
           >
             Start Project Brief
-          </a>
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
         </div>
       </section>
     </div>
