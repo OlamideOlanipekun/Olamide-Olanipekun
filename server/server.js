@@ -6,22 +6,8 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Rate Limiting Configuration
-const publicLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 20, // Max 20 requests per window for public endpoints
-    message: { error: 'Too many requests. Please try again later.' },
-    standardHeaders: true,
-    legacyHeaders: false
-});
-
-const strictLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour
-    max: 50, // Relaxed limit for testing/deployment: 50 submissions per hour
-    message: { error: 'Too many submissions. Please try again in an hour.' },
-    standardHeaders: true,
-    legacyHeaders: false
-});
+// Trust Proxy (Required for Rate Limiting on Render/Heroku)
+app.set('trust proxy', 1);
 
 // Middleware
 app.use(cors());
@@ -56,11 +42,11 @@ app.use((req, res, next) => {
     next();
 });
 
-// Routes with rate limiting
+// Routes
 app.use('/api/projects', require('./routes/projects'));
-app.use('/api/inquiries', strictLimiter, require('./routes/inquiries'));
+app.use('/api/inquiries', require('./routes/inquiries'));
 app.use('/api/skills', require('./routes/skills'));
-app.use('/api/reviews', strictLimiter, require('./routes/reviews'));
+app.use('/api/reviews', require('./routes/reviews'));
 app.use('/api/newsletter', require('./routes/newsletter'));
 
 // Base Route

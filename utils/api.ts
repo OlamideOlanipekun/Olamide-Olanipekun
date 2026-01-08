@@ -32,7 +32,10 @@ export const api = {
             headers,
             body: JSON.stringify(data),
         });
-        if (!response.ok) throw new Error('API Request Failed');
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`API Request Failed: ${response.status} ${response.statusText} - ${errorText}`);
+        }
         return response.json();
     },
 
