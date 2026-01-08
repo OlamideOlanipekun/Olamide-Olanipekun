@@ -132,11 +132,11 @@ const AboutPage: React.FC = () => {
       {/* Final CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-20">
         <div className="p-10 sm:p-16 md:p-24 bg-zinc-900 rounded-[2.5rem] sm:rounded-[4rem] text-center relative overflow-hidden group">
-          <div className="absolute inset-0 bg-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-          <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-8 sm:mb-10 tracking-tighter leading-tight">Ready to architect?</h2>
+          <div className="absolute inset-0 bg-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"></div>
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-8 sm:mb-10 tracking-tighter leading-tight relative z-10">Ready to architect?</h2>
           <Link
             to="/contact"
-            className="inline-flex items-center justify-center gap-4 sm:gap-6 px-8 sm:px-14 py-5 sm:py-6 bg-white text-zinc-900 rounded-xl sm:rounded-2xl font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[10px] sm:text-[11px] hover:bg-indigo-600 hover:text-white transition-all shadow-2xl active:scale-95 w-full sm:w-auto"
+            className="relative z-10 inline-flex items-center justify-center gap-4 sm:gap-6 px-8 sm:px-14 py-5 sm:py-6 bg-white text-zinc-900 rounded-xl sm:rounded-2xl font-black uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[10px] sm:text-[11px] hover:bg-indigo-600 hover:text-white transition-all shadow-2xl active:scale-95 w-full sm:w-auto"
           >
             Start Project Brief
             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
