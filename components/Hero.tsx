@@ -62,7 +62,7 @@ const Hero: React.FC = () => {
                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse [animation-delay:200ms]"></span>
               </div>
-              <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.4em]">Olamide Portfolio v2.5</span>
+              <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.4em]">Midtech Operating System v2.5</span>
             </div>
 
             <h1 className="text-[14vw] sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.8] mb-12">
@@ -73,7 +73,7 @@ const Hero: React.FC = () => {
             </h1>
 
             <p className="text-base sm:text-xl text-zinc-500 mb-14 leading-relaxed max-w-2xl animate-fade-up [animation-delay:300ms]">
-              Architecting high-stakes digital experiences through <span className="text-zinc-900 font-bold">precision code</span> and <span className="text-zinc-900 font-bold">strategic AI integration</span>. I bridge the gap between complex logic and elite design.
+              Architecting high-stakes digital experiences through <span className="text-zinc-900 font-bold">precision code</span> and <span className="text-zinc-900 font-bold">strategic AI integration</span>. Led by founder Olamide Olanipekun, we bridge the gap between complex logic and elite design.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 animate-fade-up [animation-delay:400ms]">
