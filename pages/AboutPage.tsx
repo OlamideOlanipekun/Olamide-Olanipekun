@@ -1,7 +1,38 @@
-import React from 'react';
-import founderImage from '../assets/founder.jpg';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../utils/supabaseClient';
+
+// Fallback to local asset if Supabase URL not available
+const FALLBACK_FOUNDER_IMAGE = '/assets/founder.jpg';
 
 const AboutPage: React.FC = () => {
+  const [founderImage, setFounderImage] = useState<string>(FALLBACK_FOUNDER_IMAGE);
+
+  useEffect(() => {
+    // Try to get founder image from Supabase Storage
+    const fetchFounderImage = async () => {
+      try {
+        // Check for any founder.* file in assets bucket
+        const { data: files } = await supabase.storage.from('assets').list('', {
+          search: 'founder'
+        });
+
+        if (files && files.length > 0) {
+          const founderFile = files.find(f => f.name.startsWith('founder.'));
+          if (founderFile) {
+            const { data } = supabase.storage.from('assets').getPublicUrl(founderFile.name);
+            if (data?.publicUrl) {
+              setFounderImage(data.publicUrl + '?t=' + Date.now()); // Cache bust
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch founder image, using fallback', error);
+      }
+    };
+
+    fetchFounderImage();
+  }, []);
+
   return (
     <div className="bg-white min-h-screen pt-32 pb-24">
       {/* Hero Section */}
