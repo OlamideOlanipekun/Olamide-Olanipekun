@@ -34,7 +34,7 @@ const AboutSection: React.FC = () => {
           <div className="lg:col-span-5 animate-fade-up">
             <div className="inline-flex items-center gap-3 mb-8">
               <span className="w-8 h-px bg-indigo-600"></span>
-              <span className="text-indigo-600 text-[10px] font-black uppercase tracking-[0.5em]">The Manifesto</span>
+              <span className="text-indigo-600 text-[10px] font-black uppercase tracking-[0.5em]">About Me</span>
             </div>
             <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-[0.9] text-zinc-900 mb-8">
               Precision <br />
@@ -67,7 +67,7 @@ const AboutSection: React.FC = () => {
                 to="/about"
                 className="group inline-flex items-center gap-6 text-[11px] font-black uppercase tracking-[0.3em] text-zinc-900 hover:text-indigo-600 transition-colors"
               >
-                Read our story
+                Read my story
                 <div className="w-10 h-10 rounded-full border border-zinc-200 flex items-center justify-center group-hover:border-indigo-600 group-hover:bg-indigo-50 transition-all">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />

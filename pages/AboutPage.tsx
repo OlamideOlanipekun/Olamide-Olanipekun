@@ -49,7 +49,7 @@ const AboutPage: React.FC = () => {
             VISION<span className="text-zinc-300">.</span>
           </h1>
           <p className="text-xl sm:text-3xl text-zinc-500 leading-tight max-w-3xl font-medium">
-            Midtech Solutions is a high-performance digital studio architecting the future of web ecosystems.
+            I architect high-performance digital ecosystems that merge technical rigor with creative intuition.
           </p>
         </div>
       </section>
@@ -69,10 +69,10 @@ const AboutPage: React.FC = () => {
               </div>
               <div className="space-y-6 text-zinc-600 text-lg leading-relaxed">
                 <p>
-                  As an Information Technology scholar at the National Open University of Nigeria, Olamide bridges the gap between academic computer science and commercial engineering.
+                  As an Information Technology scholar at the National Open University of Nigeria, I bridge the gap between academic computer science and commercial engineering.
                 </p>
                 <p>
-                  With a focus on full-stack architecture and AI integration, he founded Midtech Solutions to provide a high-stakes alternative to generic digital agencies. His work is defined by precision, scalability, and a commitment to clean, maintainable code.
+                  With a focus on full-stack architecture and AI integration, I founded Midtech Solutions to provide a high-stakes alternative to generic digital agencies. My work is defined by precision, scalability, and a commitment to clean, maintainable code.
                 </p>
               </div>
             </div>
@@ -107,14 +107,14 @@ const AboutPage: React.FC = () => {
       <section className="py-32">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-24">
-            <h2 className="text-indigo-600 text-[10px] font-black uppercase tracking-[0.5em] mb-6">Our DNA</h2>
+            <h2 className="text-indigo-600 text-[10px] font-black uppercase tracking-[0.5em] mb-6">My Philosophy</h2>
             <p className="text-4xl sm:text-6xl font-black tracking-tighter text-zinc-900">Engineering with Intent.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: 'Technical Rigor', desc: 'No shortcuts. We prioritize strict typing, modular architecture, and comprehensive documentation in every build.' },
-              { title: 'AI Integration', desc: 'We treat AI as a core component, not an afterthought, building native LLM integration layers into modern software.' },
+              { title: 'Technical Rigor', desc: 'No shortcuts. I prioritize strict typing, modular architecture, and comprehensive documentation in every build.' },
+              { title: 'AI Integration', desc: 'I treat AI as a core component, not an afterthought, building native LLM integration layers into modern software.' },
               { title: 'Strategic Scaling', desc: 'Every solution is architected to handle the next 10x growth phase of your business, ensuring technical longevity.' }
             ].map((value, idx) => (
               <div key={idx} className="p-10 border border-zinc-200 rounded-[3rem] hover:border-indigo-600/30 transition-all group">
