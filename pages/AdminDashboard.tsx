@@ -149,21 +149,35 @@ const AdminDashboard: React.FC = () => {
   };
 
   const uploadImage = async (file: File) => {
+    // Debug: Check if Supabase client is configured
+    if (!supabase) {
+      alert("Supabase client is not initialized!");
+      throw new Error("Supabase client missing");
+    }
+
     const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random()}.${fileExt}`;
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
     const filePath = `${fileName}`;
+
+    console.log(`Attempting to upload: ${filePath} to 'projects' bucket`);
 
     const { error: uploadError } = await supabase.storage
       .from('projects')
-      .upload(filePath, file);
+      .upload(filePath, file, { upsert: true });
 
     if (uploadError) {
+      console.error("Supabase Upload Error:", uploadError);
+      alert(`Upload Failed: ${uploadError.message}`);
       throw uploadError;
     }
 
     const { data } = supabase.storage
       .from('projects')
       .getPublicUrl(filePath);
+
+    console.log("Image Uploaded! Public URL:", data.publicUrl);
+    // Alert the user to verify the URL
+    // alert(`Image Uploaded! URL: ${data.publicUrl}`); 
 
     return data.publicUrl;
   };
