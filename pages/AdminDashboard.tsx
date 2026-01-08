@@ -37,9 +37,6 @@ const AdminDashboard: React.FC = () => {
   // Founder Image State
   const [founderImageUrl, setFounderImageUrl] = useState<string>('/assets/founder.jpg');
   const [founderImageFile, setFounderImageFile] = useState<File | null>(null);
-  // Founder Image State
-  const [founderImageUrl, setFounderImageUrl] = useState<string>('/assets/founder.jpg');
-  const [founderImageFile, setFounderImageFile] = useState<File | null>(null);
   const [founderImagePreview, setFounderImagePreview] = useState<string | null>(null);
 
   // Newsletter State

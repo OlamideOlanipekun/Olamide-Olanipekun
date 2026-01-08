@@ -17,7 +17,7 @@ const publicLimiter = rateLimit({
 
 const strictLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
-    max: 5, // Max 5 form submissions per hour
+    max: 50, // Relaxed limit for testing/deployment: 50 submissions per hour
     message: { error: 'Too many submissions. Please try again in an hour.' },
     standardHeaders: true,
     legacyHeaders: false
