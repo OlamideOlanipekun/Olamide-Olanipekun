@@ -13,6 +13,7 @@ interface Project {
   image_url: string;
   repo_link?: string;
   live_link?: string;
+  year?: string;
 }
 
 const AdminDashboard: React.FC = () => {
@@ -26,7 +27,7 @@ const AdminDashboard: React.FC = () => {
   const [showAddSkillModal, setShowAddSkillModal] = useState(false);
 
   // Form State
-  const [newProject, setNewProject] = useState({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '' });
+  const [newProject, setNewProject] = useState({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '', year: new Date().getFullYear().toString() });
   const [newSkill, setNewSkill] = useState({ name: '', category: 'Frontend', icon: '⚡', level: 80, description: '', tags: '' });
   const [uploading, setUploading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -135,7 +136,7 @@ const AdminDashboard: React.FC = () => {
 
       // Reset Form
       setShowAddModal(false);
-      setNewProject({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '' });
+      setNewProject({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '', year: new Date().getFullYear().toString() });
       setImageFile(null);
       setImagePreview(null);
 
@@ -379,6 +380,32 @@ const AdminDashboard: React.FC = () => {
                     value={newProject.tags} onChange={e => setNewProject({ ...newProject, tags: e.target.value })}
                   />
                   <p className="text-[9px] text-zinc-400 ml-1">Separate technologies with commas</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input
+                    type="text" placeholder="Live Project URL (Optional)"
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
+                    value={newProject.live_link} onChange={e => setNewProject({ ...newProject, live_link: e.target.value })}
+                  />
+                  <input
+                    type="text" placeholder="GitHub Repo URL (Optional)"
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
+                    value={newProject.repo_link} onChange={e => setNewProject({ ...newProject, repo_link: e.target.value })}
+                  />
+                  <input
+                    type="text" placeholder="Year (e.g. 2024)"
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
+                    value={newProject.year} onChange={e => setNewProject({ ...newProject, year: e.target.value })}
+                  />
+                  <select
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all text-zinc-600"
+                    value={newProject.status} onChange={e => setNewProject({ ...newProject, status: e.target.value })}
+                  >
+                    <option value="Live">Live</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Coming Soon">Coming Soon</option>
+                  </select>
                 </div>
 
                 {/* Image Upload Section */}
