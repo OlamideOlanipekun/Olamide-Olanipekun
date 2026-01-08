@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
 import { api } from '../utils/api';
 
 interface Review {
@@ -95,30 +99,49 @@ const Reviews: React.FC = () => {
                 </div>
 
                 {reviews.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                        {reviews.map((review, idx) => (
-                            <div
-                                key={review.id}
-                                className="bg-white p-8 rounded-[2rem] border border-zinc-100 shadow-sm hover:shadow-xl transition-all duration-500 animate-fade-up group"
-                                style={{ animationDelay: `${idx * 100}ms` }}
-                            >
-                                <StarRating rating={review.rating} />
-                                <p className="text-zinc-600 leading-relaxed mt-6 mb-8 text-sm">
-                                    "{review.message}"
-                                </p>
-                                <div className="flex items-center gap-4 pt-6 border-t border-zinc-100">
-                                    <div className="w-12 h-12 rounded-xl bg-zinc-900 flex items-center justify-center text-white font-black text-lg">
-                                        {review.name.charAt(0).toUpperCase()}
+                    <div className="mb-16">
+                        <Swiper
+                            modules={[Autoplay, Pagination]}
+                            spaceBetween={24}
+                            slidesPerView={1}
+                            autoplay={{
+                                delay: 4000,
+                                disableOnInteraction: false,
+                                pauseOnMouseEnter: true
+                            }}
+                            pagination={{
+                                clickable: true,
+                                bulletClass: 'swiper-pagination-bullet !w-2 !h-2 !bg-zinc-300 !opacity-100',
+                                bulletActiveClass: '!bg-indigo-600 !w-6 !rounded-full'
+                            }}
+                            breakpoints={{
+                                640: { slidesPerView: 2 },
+                                1024: { slidesPerView: 3 }
+                            }}
+                            className="!pb-12"
+                        >
+                            {reviews.map((review) => (
+                                <SwiperSlide key={review.id}>
+                                    <div className="bg-white p-8 rounded-[2rem] border border-zinc-100 shadow-sm hover:shadow-xl transition-all duration-500 h-full group">
+                                        <StarRating rating={review.rating} />
+                                        <p className="text-zinc-600 leading-relaxed mt-6 mb-8 text-sm min-h-[80px]">
+                                            "{review.message}"
+                                        </p>
+                                        <div className="flex items-center gap-4 pt-6 border-t border-zinc-100">
+                                            <div className="w-12 h-12 rounded-xl bg-zinc-900 flex items-center justify-center text-white font-black text-lg">
+                                                {review.name.charAt(0).toUpperCase()}
+                                            </div>
+                                            <div>
+                                                <div className="font-black text-zinc-900 text-sm">{review.name}</div>
+                                                {review.company && (
+                                                    <div className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">{review.company}</div>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div className="font-black text-zinc-900 text-sm">{review.name}</div>
-                                        {review.company && (
-                                            <div className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">{review.company}</div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
                     </div>
                 ) : (
                     <div className="text-center py-16 bg-white rounded-[2.5rem] border border-dashed border-zinc-200 mb-16">
