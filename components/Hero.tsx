@@ -7,12 +7,12 @@ const Hero: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ 
-        x: (e.clientX / window.innerWidth) - 0.5, 
-        y: (e.clientY / window.innerHeight) - 0.5 
+      setMousePos({
+        x: (e.clientX / window.innerWidth) - 0.5,
+        y: (e.clientY / window.innerHeight) - 0.5
       });
     };
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('mousemove', handleMouseMove);
     return () => {
@@ -26,30 +26,30 @@ const Hero: React.FC = () => {
       {/* Dynamic Architectural Grid Background (Light Mode) */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {/* Subtle Dots */}
-        <div 
-          className="absolute inset-0 opacity-[0.2]" 
-          style={{ 
-            backgroundImage: 'radial-gradient(circle, #cbd5e1 1px, transparent 1px)', 
+        <div
+          className="absolute inset-0 opacity-[0.2]"
+          style={{
+            backgroundImage: 'radial-gradient(circle, #cbd5e1 1px, transparent 1px)',
             backgroundSize: '40px 40px',
             transform: `translate(${mousePos.x * -20}px, ${mousePos.y * -20}px)`
           }}
         ></div>
-        
+
         {/* Large Geometric Accents */}
-        <div 
+        <div
           className="absolute -top-[10%] -right-[10%] w-[60%] h-[60%] border border-zinc-100 rounded-full"
           style={{ transform: `translate(${mousePos.x * 40}px, ${scrollY * 0.1}px)` }}
         ></div>
-        <div 
+        <div
           className="absolute top-[20%] -left-[5%] w-[40%] h-[40%] border border-indigo-500/[0.03] rotate-45"
           style={{ transform: `translate(${mousePos.x * -30}px, ${scrollY * -0.05}px)` }}
         ></div>
 
         {/* Ambient Glows - Softer for white background */}
-        <div 
+        <div
           className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-50/50 blur-[150px] rounded-full animate-blob"
         ></div>
-        <div 
+        <div
           className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-50/50 blur-[180px] rounded-full animate-blob animation-delay-2000"
         ></div>
       </div>
@@ -62,7 +62,7 @@ const Hero: React.FC = () => {
                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse [animation-delay:200ms]"></span>
               </div>
-              <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.4em]">Midtech Operating System v2.5</span>
+              <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.4em]">Olamide Portfolio v2.5</span>
             </div>
 
             <h1 className="text-[14vw] sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.8] mb-12">
@@ -73,21 +73,21 @@ const Hero: React.FC = () => {
             </h1>
 
             <p className="text-base sm:text-xl text-zinc-500 mb-14 leading-relaxed max-w-2xl animate-fade-up [animation-delay:300ms]">
-              Architecting high-stakes digital experiences through <span className="text-zinc-900 font-bold">precision code</span> and <span className="text-zinc-900 font-bold">strategic AI integration</span>. Led by founder Olamide Olanipekun, we bridge the gap between complex logic and elite design.
+              Architecting high-stakes digital experiences through <span className="text-zinc-900 font-bold">precision code</span> and <span className="text-zinc-900 font-bold">strategic AI integration</span>. I bridge the gap between complex logic and elite design.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 animate-fade-up [animation-delay:400ms]">
-              <a 
-                href="#projects" 
+              <a
+                href="#projects"
                 className="group relative px-12 py-6 bg-zinc-900 text-white rounded-2xl font-black uppercase tracking-[0.25em] text-[11px] transition-all flex items-center justify-center gap-4 shadow-2xl shadow-zinc-900/10 hover:shadow-indigo-600/40 hover:-translate-y-1 overflow-hidden"
               >
                 <span className="relative z-10">Deploy Projects</span>
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  width="20" 
-                  height="20" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                   className="relative z-10 transition-transform duration-300 group-hover:translate-x-2"
                 >
@@ -96,8 +96,8 @@ const Hero: React.FC = () => {
                 {/* Button Shimmer Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
               </a>
-              <a 
-                href="#contact" 
+              <a
+                href="#contact"
                 className="px-12 py-6 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-900 rounded-2xl font-black uppercase tracking-[0.25em] text-[11px] transition-all flex items-center justify-center hover:border-zinc-900 shadow-sm"
               >
                 Studio Brief
