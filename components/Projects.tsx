@@ -97,21 +97,21 @@ const Projects: React.FC<ProjectsProps> = ({ limit }) => {
             </p>
           </div>
 
-          <div className={`w-full md:w-auto overflow-x-auto no-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0 flex justify-start md:justify-end animate-fade-up [animation-delay:200ms]`}>
-            <div className="flex items-center gap-1.5 p-1.5 bg-zinc-50 border border-zinc-200 rounded-2xl shadow-sm">
+          <div className="w-full md:w-auto overflow-x-auto no-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0 flex justify-start md:justify-end animate-fade-up [animation-delay:200ms] sticky top-20 z-20 py-2 md:py-0 md:static bg-white/80 backdrop-blur-xl md:bg-transparent md:backdrop-blur-none border-b border-zinc-100 md:border-none -mt-2 md:mt-0">
+            <div className="flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 bg-zinc-50 border border-zinc-200 rounded-xl sm:rounded-2xl shadow-sm">
               {Categories.map(cat => {
                 const isActive = activeCategory === cat;
                 return (
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`group relative flex items-center gap-3 px-6 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-500 whitespace-nowrap overflow-hidden ${isActive
+                    className={`group relative flex items-center gap-1.5 sm:gap-3 px-3 sm:px-6 py-2 sm:py-3 text-[9px] sm:text-[10px] font-black uppercase tracking-wider sm:tracking-widest rounded-lg sm:rounded-xl transition-all duration-500 whitespace-nowrap overflow-hidden ${isActive
                       ? 'text-white'
                       : 'text-zinc-400 hover:text-zinc-900 hover:bg-white'
                       }`}
                   >
                     <span className="relative z-10">{cat}</span>
-                    <span className={`relative z-10 flex items-center justify-center min-w-[1.6rem] h-[1.6rem] text-[9px] rounded-full font-bold transition-all duration-500 ${isActive
+                    <span className={`relative z-10 flex items-center justify-center min-w-[1.2rem] sm:min-w-[1.6rem] h-[1.2rem] sm:h-[1.6rem] text-[8px] sm:text-[9px] rounded-full font-bold transition-all duration-500 ${isActive
                       ? 'bg-white/20 text-white'
                       : 'bg-zinc-200/50 text-zinc-400 group-hover:bg-zinc-100 group-hover:text-zinc-600'
                       }`}>
