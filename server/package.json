@@ -14,10 +14,12 @@
   "type": "commonjs",
   "dependencies": {
     "@supabase/supabase-js": "^2.89.0",
+    "axios": "^1.13.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
+    "nodemailer": "^7.0.12",
     "validator": "^13.15.26",
     "xss-clean": "^0.1.4"
   }

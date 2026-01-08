@@ -18,7 +18,7 @@ interface Project {
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'inquiries' | 'skills' | 'settings' | 'reviews'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'inquiries' | 'skills' | 'settings' | 'reviews' | 'newsletter'>('overview');
   const [projects, setProjects] = useState<Project[]>([]);
   const [inquiries, setInquiries] = useState<any[]>([]);
   const [skills, setSkills] = useState<any[]>([]);
@@ -37,7 +37,31 @@ const AdminDashboard: React.FC = () => {
   // Founder Image State
   const [founderImageUrl, setFounderImageUrl] = useState<string>('/assets/founder.jpg');
   const [founderImageFile, setFounderImageFile] = useState<File | null>(null);
+  // Founder Image State
+  const [founderImageUrl, setFounderImageUrl] = useState<string>('/assets/founder.jpg');
+  const [founderImageFile, setFounderImageFile] = useState<File | null>(null);
   const [founderImagePreview, setFounderImagePreview] = useState<string | null>(null);
+
+  // Newsletter State
+  const [newsletter, setNewsletter] = useState({ subject: '', message: '' });
+  const [sendingNewsletter, setSendingNewsletter] = useState(false);
+
+  const handleSendNewsletter = async (testMode = false) => {
+    if (!newsletter.subject || !newsletter.message) return alert('Subject and message required');
+    if (!testMode && !window.confirm('Are you sure you want to email ALL contacts?')) return;
+
+    setSendingNewsletter(true);
+    try {
+      const res = await api.post('/newsletter/broadcast', { ...newsletter, testMode });
+      alert(testMode ? 'Test email sent!' : `Sent to ${res.sent} contacts!`);
+      if (!testMode) setNewsletter({ subject: '', message: '' });
+    } catch (error) {
+      console.error('Failed to send newsletter', error);
+      alert('Failed to send newsletter');
+    } finally {
+      setSendingNewsletter(false);
+    }
+  };
   const [uploadingFounderImage, setUploadingFounderImage] = useState(false);
 
   const fetchProjects = async () => {
@@ -261,6 +285,7 @@ const AdminDashboard: React.FC = () => {
     { id: 'inquiries', label: 'Inquiries', icon: '✉️' },
     { id: 'skills', label: 'Capabilities', icon: '🛠️' },
     { id: 'reviews', label: 'Reviews', icon: '⭐' },
+    { id: 'newsletter', label: 'Newsletter', icon: '📢' },
     { id: 'settings', label: 'Settings', icon: '⚙️' },
   ];
 
@@ -852,8 +877,8 @@ const AdminDashboard: React.FC = () => {
                           <button
                             onClick={() => handleFeatureReview(review.id, !review.featured)}
                             className={`px-3 py-1.5 text-[9px] font-black uppercase rounded-lg transition-colors ${review.featured
-                                ? 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'
-                                : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200'
+                              ? 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'
+                              : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200'
                               }`}
                           >
                             {review.featured ? '★ Featured' : '☆ Feature'}
@@ -872,6 +897,50 @@ const AdminDashboard: React.FC = () => {
                     </div>
                   ))
                 )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Newsletter Tab */}
+        {activeTab === 'newsletter' && (
+          <div className="space-y-8 animate-fade-up">
+            <div className="bg-white p-8 rounded-[2.5rem] border border-zinc-200 shadow-sm">
+              <h3 className="text-xl font-black text-zinc-900 mb-2">Broadcast Email</h3>
+              <p className="text-zinc-500 text-sm mb-6">Send updates to all {inquiries.length + ((reviews || []).length)} unique contacts.</p>
+
+              <div className="space-y-4 max-w-2xl">
+                <input
+                  type="text"
+                  placeholder="Email Subject"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all font-bold"
+                  value={newsletter.subject}
+                  onChange={(e) => setNewsletter({ ...newsletter, subject: e.target.value })}
+                />
+                <textarea
+                  rows={8}
+                  placeholder="Write your update here... (HTML supported)"
+                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all resize-none font-mono"
+                  value={newsletter.message}
+                  onChange={(e) => setNewsletter({ ...newsletter, message: e.target.value })}
+                />
+
+                <div className="flex gap-4 pt-2">
+                  <button
+                    onClick={() => handleSendNewsletter(true)}
+                    disabled={sendingNewsletter}
+                    className="px-6 py-3 bg-zinc-100 text-zinc-600 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-zinc-200 transition-colors disabled:opacity-50"
+                  >
+                    Send Test (To Me)
+                  </button>
+                  <button
+                    onClick={() => handleSendNewsletter(false)}
+                    disabled={sendingNewsletter}
+                    className="px-6 py-3 bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-700 transition-colors disabled:opacity-50 flex-1"
+                  >
+                    {sendingNewsletter ? 'Sending...' : 'Send Broadcast'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -61,6 +61,7 @@ app.use('/api/projects', require('./routes/projects'));
 app.use('/api/inquiries', strictLimiter, require('./routes/inquiries'));
 app.use('/api/skills', require('./routes/skills'));
 app.use('/api/reviews', strictLimiter, require('./routes/reviews'));
+app.use('/api/newsletter', require('./routes/newsletter'));
 
 // Base Route
 app.get('/', (req, res) => {
