@@ -18,7 +18,7 @@ interface Project {
 
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'inquiries' | 'skills'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'inquiries' | 'skills' | 'settings'>('overview');
   const [projects, setProjects] = useState<Project[]>([]);
   const [inquiries, setInquiries] = useState<any[]>([]);
   const [skills, setSkills] = useState<any[]>([]);
@@ -33,6 +33,12 @@ const AdminDashboard: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Founder Image State
+  const [founderImageUrl, setFounderImageUrl] = useState<string>('/assets/founder.jpg');
+  const [founderImageFile, setFounderImageFile] = useState<File | null>(null);
+  const [founderImagePreview, setFounderImagePreview] = useState<string | null>(null);
+  const [uploadingFounderImage, setUploadingFounderImage] = useState(false);
 
   const fetchProjects = async () => {
     try {
@@ -240,7 +246,46 @@ const AdminDashboard: React.FC = () => {
     { id: 'projects', label: 'Projects', icon: '💼' },
     { id: 'inquiries', label: 'Inquiries', icon: '✉️' },
     { id: 'skills', label: 'Capabilities', icon: '🛠️' },
+    { id: 'settings', label: 'Settings', icon: '⚙️' },
   ];
+
+  const handleFounderImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setFounderImageFile(file);
+      setFounderImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleFounderImageUpload = async () => {
+    if (!founderImageFile) return;
+    setUploadingFounderImage(true);
+    try {
+      const fileExt = founderImageFile.name.split('.').pop();
+      const fileName = `founder.${fileExt}`;
+
+      // Delete old file if exists
+      await supabase.storage.from('assets').remove([fileName]);
+
+      // Upload new file
+      const { error: uploadError } = await supabase.storage
+        .from('assets')
+        .upload(fileName, founderImageFile, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from('assets').getPublicUrl(fileName);
+      setFounderImageUrl(data.publicUrl + '?t=' + Date.now()); // Cache bust
+      setFounderImageFile(null);
+      setFounderImagePreview(null);
+      alert('Founder image updated successfully!');
+    } catch (error: any) {
+      console.error('Failed to upload founder image', error);
+      alert('Failed to upload image: ' + error.message);
+    } finally {
+      setUploadingFounderImage(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-zinc-50 flex">
@@ -708,6 +753,96 @@ const AdminDashboard: React.FC = () => {
                   <button type="submit" className="flex-1 py-3 bg-indigo-600 text-white text-xs font-bold uppercase rounded-xl hover:bg-indigo-700 transition-colors">Add</button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Settings Tab */}
+        {activeTab === 'settings' && (
+          <div className="space-y-8 animate-fade-up">
+            <div className="bg-white rounded-[2.5rem] border border-zinc-200 overflow-hidden shadow-sm">
+              <div className="p-8 border-b border-zinc-100">
+                <h3 className="text-sm font-black uppercase tracking-widest text-zinc-900">Site Settings</h3>
+                <p className="text-[10px] text-zinc-400 mt-1">Manage your portfolio branding and assets</p>
+              </div>
+
+              <div className="p-8">
+                {/* Founder Image Section */}
+                <div className="mb-10">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 mb-6">Founder Image</h4>
+                  <div className="flex flex-col md:flex-row gap-8 items-start">
+                    {/* Current Image Preview */}
+                    <div className="relative group">
+                      <div className="w-40 h-40 rounded-[2rem] overflow-hidden border-4 border-zinc-100 shadow-xl">
+                        <img
+                          src={founderImagePreview || founderImageUrl}
+                          alt="Founder"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {founderImagePreview && (
+                        <div className="absolute inset-0 bg-indigo-600/20 rounded-[2rem] flex items-center justify-center">
+                          <span className="text-[9px] font-black text-white bg-indigo-600 px-3 py-1 rounded-full uppercase tracking-widest">New</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Upload Controls */}
+                    <div className="flex-1 space-y-4">
+                      <p className="text-sm text-zinc-500 leading-relaxed">
+                        This image appears on the About page and throughout the site. Use a high-quality, professional photo.
+                      </p>
+
+                      <div className="border-2 border-dashed border-zinc-200 rounded-2xl p-6 text-center hover:bg-zinc-50 transition-colors relative cursor-pointer">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFounderImageSelect}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        />
+                        <span className="text-2xl block mb-2">📸</span>
+                        <span className="text-xs font-bold text-zinc-400 uppercase tracking-wide">
+                          {founderImageFile ? founderImageFile.name : 'Click to select new image'}
+                        </span>
+                      </div>
+
+                      {founderImageFile && (
+                        <div className="flex gap-3">
+                          <button
+                            onClick={() => { setFounderImageFile(null); setFounderImagePreview(null); }}
+                            className="flex-1 py-3 text-xs font-bold uppercase border border-zinc-200 rounded-xl hover:bg-zinc-50 transition-colors"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={handleFounderImageUpload}
+                            disabled={uploadingFounderImage}
+                            className="flex-1 py-3 bg-indigo-600 text-white text-xs font-bold uppercase rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                          >
+                            {uploadingFounderImage ? (
+                              <>
+                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                Uploading...
+                              </>
+                            ) : (
+                              'Save New Image'
+                            )}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div className="h-px bg-zinc-100 my-10"></div>
+
+                {/* Additional Settings Placeholder */}
+                <div>
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 mb-6">More Settings</h4>
+                  <p className="text-sm text-zinc-400">Additional settings coming soon...</p>
+                </div>
+              </div>
             </div>
           </div>
         )}
