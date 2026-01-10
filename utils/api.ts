@@ -39,6 +39,20 @@ export const api = {
         return response.json();
     },
 
+    patch: async (endpoint: string, data: any) => {
+        const headers = await getHeaders();
+        const response = await fetch(`${API_URL}${endpoint}`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`API Request Failed: ${response.status} ${response.statusText} - ${errorText}`);
+        }
+        return response.json();
+    },
+
     delete: async (endpoint: string) => {
         const headers = await getHeaders();
         const response = await fetch(`${API_URL}${endpoint}`, {
