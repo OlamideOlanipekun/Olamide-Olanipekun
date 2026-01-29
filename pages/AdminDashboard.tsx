@@ -27,7 +27,7 @@ const AdminDashboard: React.FC = () => {
   const [showAddSkillModal, setShowAddSkillModal] = useState(false);
 
   // Form State
-  const [newProject, setNewProject] = useState({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '', year: new Date().getFullYear().toString(), images: [] as string[] });
+  const [newProject, setNewProject] = useState({ title: '', description: '', category: 'Web', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '', year: new Date().getFullYear().toString(), images: [] as string[] });
   const [newSkill, setNewSkill] = useState({ name: '', category: 'Frontend', icon: '⚡', level: 80, description: '', tags: '' });
   const [uploading, setUploading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -217,7 +217,7 @@ const AdminDashboard: React.FC = () => {
 
       // Reset Form
       setShowAddModal(false);
-      setNewProject({ title: '', description: '', category: 'Web App', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '', year: new Date().getFullYear().toString(), images: [] });
+      setNewProject({ title: '', description: '', category: 'Web', status: 'Live', image_url: '', repo_link: '', live_link: '', tags: '', year: new Date().getFullYear().toString(), images: [] });
       setImageFile(null);
       setImagePreview(null);
       setGalleryFiles([]);
@@ -513,11 +513,18 @@ const AdminDashboard: React.FC = () => {
                   className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
                   value={newProject.title} onChange={e => setNewProject({ ...newProject, title: e.target.value })}
                 />
-                <input
-                  type="text" placeholder="Category (e.g. Web App)"
-                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all"
-                  value={newProject.category} onChange={e => setNewProject({ ...newProject, category: e.target.value })}
-                />
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-1">Category</label>
+                  <select
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-all text-zinc-600"
+                    value={newProject.category} onChange={e => setNewProject({ ...newProject, category: e.target.value })}
+                  >
+                    <option value="Web">Web</option>
+                    <option value="Mobile">Mobile</option>
+                    <option value="Design">Design</option>
+                    <option value="AI">AI</option>
+                  </select>
+                </div>
                 <textarea
                   placeholder="Project Description - Describe what this project does..."
                   rows={3}

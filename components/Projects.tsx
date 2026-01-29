@@ -43,12 +43,19 @@ const Projects: React.FC<ProjectsProps> = ({ limit }) => {
     const fetchProjects = async () => {
       try {
         const data = await api.get('/projects');
-        // Ensure tags is always an array
-        const sanitizedData = data.map((p: any) => ({
-          ...p,
-          tags: p.tags || [],
-          imageUrl: p.image_url // Map snake_case from DB to camelCase if needed, or update component to use image_url
-        }));
+        const sanitizedData = data.map((p: any) => {
+          let category = p.category || 'Web';
+          // Normalize categories
+          if (category === 'Web App') category = 'Web';
+          if (category === 'Mobile App') category = 'Mobile';
+
+          return {
+            ...p,
+            category,
+            tags: p.tags || [],
+            imageUrl: p.image_url
+          };
+        });
         setProjects(sanitizedData);
       } catch (error) {
         console.error('Failed to load projects', error);
